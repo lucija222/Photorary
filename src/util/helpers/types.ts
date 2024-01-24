@@ -1,6 +1,5 @@
 //--------------------------------------------------------------SLICES
 type Status = "idle" | "pending" | "succeeded" | "failed";
-type SliceError = string | undefined;
 
 export interface FetchThunkArg {
     url: string;
@@ -10,7 +9,7 @@ export interface FetchThunkArg {
 export interface InitAdapterState {
     status: Status;
     loader: boolean;
-    error: SliceError;
+    error: string;
     totalSearchResults: number;
 }
 
@@ -21,22 +20,27 @@ interface UserProfileImage {
     large: string;
 }
 
-interface PhotoUrls {
-    regular: string;
-    small: string;
-}
+// interface PhotoUrls {
+//     regular: string;
+//     small: string;
+// }
 
-interface PhotoLink {
-    download_location: string;
-}
+// interface PhotoLink {
+//     download_location: string;
+// }
 
 export interface ApiPhotoObj {
     id: string;
     created_at: string;
-    urls: PhotoUrls;
+    urls:  {
+        regular: string;
+        small: string;
+    };
     likes: number;
     liked_by_user: false;
-    links: PhotoLink;
+    links:  {
+        download_location: string;
+    };
     user: ApiUserObj;
 }
 export interface ApiUserObj {

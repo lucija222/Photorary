@@ -3,12 +3,12 @@ import { LampSvg, PlantSvg, TableSvg } from "../../../assets/svg/exports";
 
 const SvgComposition = () => {
     return (
-        <div className="svg-container">
-            <div className="table-decor">
+        <div id="table-svg-container">
+            <div id="table-decor">
                 <LampSvg />
                 <PlantSvg />
             </div>
-            <div className="table-container">
+            <div id="table-container">
             <TableSvg />
             </div>
         </div>

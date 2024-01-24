@@ -1,9 +1,9 @@
 import { AppDispatch, RootState } from "./store";
-import { ApiUsersArray, FetchThunkArg, InitAdapterState } from "../util/helpers/types";
+import { ApiUserObj, ApiUsersArray, FetchThunkArg, InitAdapterState } from "../util/helpers/types";
 import { fetchData } from "../util/helpers/functions/fetchData";
 import { createAsyncThunk, createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const usersAdapter = createEntityAdapter();
+const usersAdapter = createEntityAdapter<ApiUserObj>();
 
 const initAdapterState: InitAdapterState = {
     status: "idle",
@@ -51,7 +51,9 @@ const usersSlice = createSlice({
             })
             .addCase(fetchUsers.rejected, (state, action) => {
                 state.status = "failed";
-                state.error = action.error.message;
+                if (action.error.message) {
+                    state.error = action.error.message;
+                }
             })
             .addCase(fetchUsers.fulfilled, (state) => {
                 state.status = "succeeded";
@@ -60,9 +62,9 @@ const usersSlice = createSlice({
 });
 
 export const {
-    selectAll: SelectAllUsers,
-    selectById: SelectUserById,
-    selectIds: SelectUsersIds,
+    selectAll: selectAllUsers,
+    selectById: selectUserById,
+    selectIds: selectUsersIds,
 } = usersAdapter.getSelectors((state: RootState) => state.users);
 
 export const { overwriteUsers, addUsers, setTotalUserSearchResults } = usersSlice.actions;

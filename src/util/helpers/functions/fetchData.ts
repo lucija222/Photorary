@@ -17,19 +17,21 @@ export const fetchData = async (
     const data = await response.json();
     const isPhotosSlice = slice === "photosSlice";
 
+    const handleSearchResultsTotal = (payload: number) => {
+        return isPhotosSlice
+        ? setTotalPhotosSearchResults(payload)
+        : setTotalUserSearchResults(payload)
+    }
+
     if (url.includes("/search/")) {
         dispatch(
-            isPhotosSlice
-                ? setTotalPhotosSearchResults(data.total)
-                : setTotalUserSearchResults(data.total)
+            handleSearchResultsTotal(data.total)
         );
         return data.results;
 
     } else {
         dispatch(
-            isPhotosSlice
-                ? setTotalPhotosSearchResults(0)
-                : setTotalUserSearchResults(0)
+            handleSearchResultsTotal(0)
         );
         return data;
     }
