@@ -1,11 +1,11 @@
 import { MutableRefObject, useEffect, useState } from "react";
 import RenderDynamicGridColumns from "../RenderDynamicGridColumns/RenderDynamicGridColumns";
 
-interface ObserverProps {
+interface ResizeObserverCompProps {
     mainPhotosGridRef: MutableRefObject<HTMLDivElement | null>
 }
 
-const Observer = ({mainPhotosGridRef}: ObserverProps) => {
+const ResizeObserverComp = ({mainPhotosGridRef}: ResizeObserverCompProps) => {
     const [mainGridColumnCount, setMainGridColumnCount] = useState<number>(1);
 
     useEffect(() => {
@@ -39,4 +39,4 @@ const Observer = ({mainPhotosGridRef}: ObserverProps) => {
     );
 };
 
-export default Observer;
+export default ResizeObserverComp;

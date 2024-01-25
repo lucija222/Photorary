@@ -2,4 +2,14 @@ body {
     background-color: #e1d5cd;
     // font-family: 'Playfair Display', serif;
     font-family: 'Work Sans', sans-serif;
+
+    button {
+        cursor: pointer;
+    }
+
+    a {
+        text-decoration: none;
+        font-style: normal;
+        color: black;
+    }
 }

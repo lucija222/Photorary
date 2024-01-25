@@ -2,6 +2,7 @@ import "./PhotoFrame.scss";
 import { selectPhotoById } from "../../../store/photosSlice";
 import { RootState } from "../../../store/store";
 import { useAppSelector } from "../../../store/hooks";
+import { Link } from "react-router-dom";
 
 interface PhotoFrameProps {
     photoId: string;
@@ -11,21 +12,30 @@ const PhotoFrame = ({ photoId }: PhotoFrameProps) => {
     const photo = useAppSelector((state: RootState) =>
         selectPhotoById(state, photoId)
     );
-    
+
     const url = photo.urls.regular;
     const author = photo.user.name;
-    // const authorUsername = photo.user.username; 
+    const authorUsername = photo.user.username;
+    const path = `/user/${authorUsername}`;
+    const authorPhotoUrl = photo.user.profile_image.small;
 
     return (
-        <div className="frame-container" >
+        <article className="frame-container">
             <div className="frame">
                 <img
                     src={url}
-                    alt={`Photography by ${author}`} //Change alt
+                    alt={`Photograph by ${author}`}
+                    className="photograph"
                 />
-                <p className="author">By {author}</p>
+
+                <address className="author">
+                    <Link to={path}>
+                        <img src={authorPhotoUrl} alt="Author" />
+                        {author}
+                    </Link>
+                </address>
             </div>
-        </div>
+        </article>
     );
 };
 

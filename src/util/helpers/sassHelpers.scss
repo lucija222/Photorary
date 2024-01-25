@@ -9,6 +9,11 @@
 }
 
 @mixin width-height ($w, $h) {
-    min-height: $w;
-    max-height: $h;
+    width: $w;
+    height: $h;
+}
+
+%flex-column {
+    display: flex;
+    flex-direction: column;
 }

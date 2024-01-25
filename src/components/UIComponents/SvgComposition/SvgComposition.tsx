@@ -1,17 +1,19 @@
 import "./SvgComposition.scss";
 import { LampSvg, PlantSvg, TableSvg } from "../../../assets/svg/exports";
+import PowerButton from "../PowerButton/PowerButton";
+import { useRef } from "react";
 
 const SvgComposition = () => {
+    const lampLightRef = useRef<HTMLDivElement | null>(null);
+
     return (
-        <div id="table-svg-container">
-            <div id="table-decor">
-                <LampSvg />
-                <PlantSvg />
-            </div>
-            <div id="table-container">
+        <>
+            <LampSvg />
+            <div id="light-div" className="" ref={lampLightRef}></div>
+            <PowerButton lampLightRef={lampLightRef} />
+            <PlantSvg />
             <TableSvg />
-            </div>
-        </div>
+        </>
     );
 };
 

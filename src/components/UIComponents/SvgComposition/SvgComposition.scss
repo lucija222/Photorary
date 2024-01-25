@@ -1,40 +1,49 @@
-@use "./../../../util/helpers/sassHelpers.scss" as *;
+@use "../../../util/helpers/sassHelpers.scss" as *;
 
-#table-svg-container {
-    position: fixed;
-    bottom: -10px;
-    display: flex;
-    flex-direction: column;
-
-    &::before {
-        content: "";
-        position: absolute;
-        bottom: 13vh;
-        width: 300px;
-        height: 300px;
+    #light-div {
+        position: fixed;
+        z-index: 4;
+        bottom: 14vh;
+        @include width-height(300px, 300px);
+        border: 2px solid black;
         border-radius: 40% 40% 40% 0;
-        // background-color: rgb(251 245 181 / 26%);
+        background-color: rgb(251 245 181 / 26%);
         background: radial-gradient(
-            circle,
-            rgba(255, 245, 181, 0.6) 0%,
-            rgba(231, 233, 148, 0.26) 100%
-        );
+        circle,
+        rgba(255, 245, 181, 0.6) 0%,
+        rgba(231, 233, 148, 0.26) 100%
+    );
+        opacity: 0;
         filter: blur(90px);
-        z-index: 1;
+        transition: opacity 0.2s ease-in-out;
     }
+
+#light-div.light-on {
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
 }
 
-#table-decor {
-    display: flex;
-    width: 95vw;
-    justify-content: space-between;
-    align-items: baseline;
-    transform: translateY(15px);
-    padding: 0 3vw;
+#lamp-plant-svg {
+    position: fixed;
+    left: 1vw;
+    bottom: 11.8vh;
+    z-index: 3;
 }
 
-#table-container {
-    width: 100vw;
-    display: flex;
-    justify-content: center;
+#plant-svg {
+    position: fixed;
+    right: 3vw;
+    bottom: 12vh;
+    z-index: 3;
+}
+
+#table-svg {
+    position: fixed;
+    bottom: 0;
+    left: 0.5vw;
+    z-index: 2;
+}
+
+#light-div, #lamp-plant-svg, #plant-svg, #table-svg {
+    pointer-events: none;
 }

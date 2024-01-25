@@ -1,6 +1,6 @@
 import "./PhotoGrid.scss";
 import { useRef } from "react";
-import Observer from "../ResizeObserver/ResizeObserver";
+import ResizeObserverComp from "../ResizeObserverComp/ResizeObserverComp";
 import SvgComposition from "../../UIComponents/SvgComposition/SvgComposition";
 
 
@@ -10,9 +10,9 @@ const PhotoGrid = () => {
 
     return (
         <>
-            <div id="photos-grid" ref={mainPhotosGridRef}>
-                <Observer mainPhotosGridRef={mainPhotosGridRef}/>
-            </div>
+            <section id="photos-grid" ref={mainPhotosGridRef}>
+                <ResizeObserverComp mainPhotosGridRef={mainPhotosGridRef}/>
+            </section>
             <SvgComposition />
         </>
     );
