@@ -3,15 +3,27 @@
 .frame-container {
     @extend %flex-column;
 
+    .author {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
     .author a {
         display: flex;
         align-items: center;
         column-gap: 10px;
+        text-align: left;
+        max-width: 80%;
         font-size: 16px;
         padding-top: 5px;
 
         img {
             border-radius: 50%;
+        }
+
+        h2 {
+            font-weight: 400;
         }
     }
 
@@ -22,6 +34,7 @@
         border-right-color: #eed;
         border-top-color: #ccb;
         max-width: 100%;
+        max-height: auto;
     }
 
     .frame {

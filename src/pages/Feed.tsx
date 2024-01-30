@@ -1,10 +1,10 @@
 import PhotoGrid from "../components/photoComps/PhotoGrid/PhotoGrid";
 
-const Photos = () => {
+const Feed = () => {
 
     return (
         <PhotoGrid />
     );
 };
 
-export default Photos;
+export default Feed;

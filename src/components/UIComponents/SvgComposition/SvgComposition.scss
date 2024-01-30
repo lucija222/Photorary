@@ -1,22 +1,22 @@
 @use "../../../util/helpers/sassHelpers.scss" as *;
 
-    #light-div {
-        position: fixed;
-        z-index: 4;
-        bottom: 14vh;
-        @include width-height(300px, 300px);
-        border: 2px solid black;
-        border-radius: 40% 40% 40% 0;
-        background-color: rgb(251 245 181 / 26%);
-        background: radial-gradient(
+#light-div {
+    position: fixed;
+    z-index: 4;
+    bottom: 6vh;
+    @include width-height(300px, 300px);
+    border: 2px solid black;
+    border-radius: 40% 40% 40% 0;
+    background-color: rgb(251 245 181 / 26%);
+    background: radial-gradient(
         circle,
         rgba(255, 245, 181, 0.6) 0%,
         rgba(231, 233, 148, 0.26) 100%
     );
-        opacity: 0;
-        filter: blur(90px);
-        transition: opacity 0.2s ease-in-out;
-    }
+    opacity: 0;
+    filter: blur(90px);
+    transition: opacity 0.2s ease-in-out;
+}
 
 #light-div.light-on {
     opacity: 1;
@@ -26,15 +26,17 @@
 #lamp-plant-svg {
     position: fixed;
     left: 1vw;
-    bottom: 11.8vh;
+    bottom: 9.2vh;
     z-index: 3;
+    @include width-height(100px, 120px);
 }
 
 #plant-svg {
     position: fixed;
     right: 3vw;
-    bottom: 12vh;
+    bottom: 9.2vh;
     z-index: 3;
+    @include width-height(45px, 65px)
 }
 
 #table-svg {
@@ -42,8 +44,32 @@
     bottom: 0;
     left: 0.5vw;
     z-index: 2;
+    @include width-height(98vw, 10vh);
 }
 
-#light-div, #lamp-plant-svg, #plant-svg, #table-svg {
+#light-div,
+#lamp-plant-svg,
+#plant-svg,
+#table-svg {
     pointer-events: none;
+}
+
+@media screen and (min-width: 450px) {
+    #lamp-plant-svg {
+       @include width-height(170px, 190px);
+       bottom: 11.8vh;
+    }
+
+    #plant-svg {
+        @include width-height(90px, 110px);
+        bottom: 12vh;
+    }
+
+    #table-svg {
+        height: 13vh;
+    }
+
+    #light-div {
+        bottom: 14vh;
+    }
 }

@@ -20,19 +20,13 @@ interface UserProfileImage {
     large: string;
 }
 
-// interface PhotoUrls {
-//     regular: string;
-//     small: string;
-// }
-
-// interface PhotoLink {
-//     download_location: string;
-// }
-
 export interface ApiPhotoObj {
     id: string;
     created_at: string;
+    alt_description?: string | null;
+    description?: string | null;
     urls:  {
+        full: string;
         regular: string;
         small: string;
     };

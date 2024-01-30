@@ -16,8 +16,11 @@ const ResizeObserverComp = ({mainPhotosGridRef}: ResizeObserverCompProps) => {
     
             for (let entry of entries) {
                 const elementWidth = entry.borderBoxSize[0].inlineSize;
+                
+                if (elementWidth < 355) { 
+                    setMainGridColumnCount(1);
 
-                if (elementWidth) {
+                } else {
                     const columnCount = Math.floor(elementWidth / minColumnWidth);
                     const finalColumnCount = Math.max(1, columnCount);
                     setMainGridColumnCount(finalColumnCount)
