@@ -9,7 +9,11 @@ export const fetchData = async (
     slice: "usersSlice" | "photosSlice"
 ) => {
     const response = await fetch(url, authHeader);
+    console.log(response);
+    
     const data = await response.json();
+    console.log(data);
+    
     const isPhotosSlice = slice === "photosSlice";
 
     const handleSearchResultsTotal = (payload: number) => {
