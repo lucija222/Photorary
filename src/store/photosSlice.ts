@@ -1,9 +1,9 @@
 import { AppDispatch, RootState } from "./store";
 import { createAsyncThunk, createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { InitAdapterState, ApiPhotosArray, FetchThunkArg } from "../util/helpers/types";
+import { InitAdapterState, ApiPhotosArray, FetchThunkArg, ApiPhotoObj } from "../util/helpers/types";
 import { fetchData } from "../util/helpers/functions/fetchData";
 
-const photosAdapter = createEntityAdapter();
+const photosAdapter = createEntityAdapter<ApiPhotoObj>();
 const initAdapterState: InitAdapterState = {
     status: "idle",
     loader: false,
@@ -51,7 +51,9 @@ const photosSlice = createSlice({
             })
             .addCase(fetchPhotos.rejected, (state, action) => {
                 state.status = "failed";
-                state.error = action.error.message;
+                if (action.error.message) {
+                    state.error = action.error.message;
+                }
             })
             .addCase(fetchPhotos.fulfilled, (state) => {
                 state.status = "succeeded";
@@ -60,9 +62,9 @@ const photosSlice = createSlice({
 });
 
 export const {
-    selectAll: SelectAllPhotos,
-    selectById: SelectPhotoById,
-    selectIds: SelectPhotosIds,
+    selectAll: selectAllPhotos,
+    selectById: selectPhotoById,
+    selectIds: selectPhotosIds,
 } = photosAdapter.getSelectors((state: RootState) => state.photos);
 
 export const { overwritePhotos, addPhotos, setTotalPhotosSearchResults } = photosSlice.actions;

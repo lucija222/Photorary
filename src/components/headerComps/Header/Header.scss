@@ -1,0 +1,25 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px 0 20px;
+    @include width-height(100vw, 60px);
+    background-color: #a88173;
+    color: #f5e8df;
+    align-items: center;
+    border-bottom: 15px solid #E1D5CD;
+
+    h1 {
+        display: flex;
+        align-items: center;
+        column-gap: 7px;
+        font-size: 24px;
+        font-weight: 400;
+        font-style: italic;
+    }
+}

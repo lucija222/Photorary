@@ -1,7 +1,7 @@
 import "./App.scss";
 import Error from "./components/UIComponents/Error/Error";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Root, Photos, Profile, Users } from "./pages/exports";
+import { Root, Feed, Profile, About, SearchResults } from "./pages/exports";
 
 const App = () => {
 
@@ -13,16 +13,20 @@ const App = () => {
             children: [
                 {
                     index: true,
-                    element: <Photos />,
-                },
-                {
-                    path: "users",
-                    element: <Users />,
+                    element: <Feed />,
                 },
                 {
                     path: "user/:username",
                     element: <Profile />,
                 },
+                {
+                    path: "/about",
+                    element: <About />
+                },
+                {
+                    path: "/search",
+                    element: <SearchResults />
+                }
             ],
         },
     ]);

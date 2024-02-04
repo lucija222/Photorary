@@ -1,0 +1,71 @@
+@use "../../../util/helpers/sassHelpers.scss";
+
+.frame-container {
+    @extend %flex-column;
+
+    .author {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
+    .author a {
+        display: flex;
+        align-items: center;
+        column-gap: 10px;
+        text-align: left;
+        max-width: 80%;
+        font-size: 16px;
+        padding-top: 5px;
+
+        img {
+            border-radius: 50%;
+        }
+
+        h2 {
+            font-weight: 400;
+        }
+    }
+
+    .photograph {
+        border: solid 2px;
+        border-bottom-color: #ffe;
+        border-left-color: #614d40;
+        border-right-color: #eed;
+        border-top-color: #ccb;
+        max-width: 100%;
+        max-height: auto;
+    }
+
+    .frame {
+        background-color: #ddc;
+        border: solid 13px #eee;
+        border-color: #5a311f #6d3b2a #7d4c36;
+        border-radius: 2px;
+        box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25) inset,
+            0 5px 10px 5px rgba(0, 0, 0, 0.25);
+        box-sizing: border-box;
+        display: inline-block;
+        padding: 15px;
+        position: relative;
+        text-align: center;
+
+        &::before {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+            inset: -4px;
+            border-radius: 2px;
+            box-shadow: 0 0.2vw 0.5vw 0.2vw rgba(0, 0, 0, 0.25) inset;
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+            inset: -7px;
+            border-radius: 2px;
+            box-shadow: 0 0.2vw 0.5vw 0.3vw rgba(0, 0, 0, 0.25);
+        }
+    }
+}

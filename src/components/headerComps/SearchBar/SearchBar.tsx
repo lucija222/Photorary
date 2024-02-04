@@ -4,7 +4,6 @@ const SearchBar = () => {
 
     return (
         <>
-        
         </>
     );
 };

@@ -1,6 +1,7 @@
 import Root from "./Root";
-import Users from "./Users";
-import Photos from "./Photos";
+import Feed from "./Feed";
 import Profile from "./Profile";
+import About from "./About";
+import SearchResults from "./SearchResults";
 
-export { Root, Users, Photos, Profile, };
+export { Root, Feed, Profile, About, SearchResults };

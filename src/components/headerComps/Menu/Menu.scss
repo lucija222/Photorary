@@ -1,0 +1,63 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+#menu {
+    @include width-height(100vw, 100vh);
+    position: fixed;
+    transform: translateX(100vw);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    --s: 60px; /* control the size */
+    --c: #b38778;
+    --_l: #0000 46%, var(--c) 47% 53%, #0000 54%;
+    background: radial-gradient(circle farthest-side at bottom right, var(--_l))
+            var(--s) var(--s),
+        radial-gradient(circle at bottom right,
+                #0000 22%,
+                var(--c) 23% 29%,
+                #0000 30% 34%,
+                var(--c) 35% 41%,
+                #0000 42%
+            )
+            #a88173;
+    background-size: calc(var(--s) * 2) calc(var(--s) * 2);
+
+    svg {
+        position: absolute;
+        top: 30px;
+        right: 50px;
+    }
+}
+
+.fade-out {
+    animation: fade-out 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.slide-in-right {
+    animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes fade-out {
+    0% {
+        transform: translateZ(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateZ(-80px);
+        opacity: 0;
+    }
+}
+
+@keyframes slide-in-right {
+    0% {
+        transform: translateX(100vw);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

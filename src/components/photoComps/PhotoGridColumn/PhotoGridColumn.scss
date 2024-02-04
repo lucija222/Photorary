@@ -1,0 +1,7 @@
+@use "../../../util/helpers/sassHelpers.scss";
+
+.photo-grid-column {
+    @extend %flex-column;
+    justify-content: flex-start;
+    row-gap: 25px;
+}

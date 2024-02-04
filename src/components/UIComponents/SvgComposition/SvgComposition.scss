@@ -1,56 +1,75 @@
-@use "./../../../util/helpers/sassHelpers.scss" as *;
+@use "../../../util/helpers/sassHelpers.scss" as *;
 
-.svg-container {
+#light-div {
     position: fixed;
-    bottom: -10px;
-    display: flex;
-    flex-direction: column;
+    z-index: 4;
+    bottom: 6vh;
+    @include width-height(300px, 300px);
+    border: 2px solid black;
+    border-radius: 40% 40% 40% 0;
+    background-color: rgb(251 245 181 / 26%);
+    background: radial-gradient(
+        circle,
+        rgba(255, 245, 181, 0.6) 0%,
+        rgba(231, 233, 148, 0.26) 100%
+    );
+    opacity: 0;
+    filter: blur(90px);
+    transition: opacity 0.2s ease-in-out;
+}
 
-    &::before {
-        content: "";
-        position: absolute;
-        bottom: 20vh;
-        width: 700px;
-        height: 400px;
-        border-radius: 40% 40% 40% 0;
-        // background-color: rgb(251 245 181 / 26%);
-        background: radial-gradient(
-            circle,
-            rgba(255, 245, 181, 0.6) 0%,
-            rgba(231, 233, 148, 0.26) 100%
-        );
-        filter: blur(90px);
-        z-index: 1;
+#light-div.light-on {
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#lamp-plant-svg {
+    position: fixed;
+    left: 1vw;
+    bottom: 9.2vh;
+    z-index: 3;
+    @include width-height(100px, 120px);
+}
+
+#plant-svg {
+    position: fixed;
+    right: 3vw;
+    bottom: 9.2vh;
+    z-index: 3;
+    @include width-height(45px, 65px)
+}
+
+#table-svg {
+    position: fixed;
+    bottom: 0;
+    left: 0.5vw;
+    z-index: 2;
+    @include width-height(98vw, 10vh);
+}
+
+#light-div,
+#lamp-plant-svg,
+#plant-svg,
+#table-svg {
+    pointer-events: none;
+}
+
+@media screen and (min-width: 450px) {
+    #lamp-plant-svg {
+       @include width-height(170px, 190px);
+       bottom: 11.8vh;
+    }
+
+    #plant-svg {
+        @include width-height(90px, 110px);
+        bottom: 12vh;
+    }
+
+    #table-svg {
+        height: 13vh;
+    }
+
+    #light-div {
+        bottom: 14vh;
     }
 }
-
-.table-decor {
-    display: flex;
-    width: 95vw;
-    justify-content: space-between;
-    align-items: baseline;
-    transform: translateY(15px);
-    padding: 0 10vw;
-}
-
-.table-container {
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-}
-
-
-// #lamp-plant-svg {
-//     width: 230px;
-//     height: 250px;
-// }
-
-// #plant-svg {
-//     width: 110px;
-//     height: 140px;
-// }
-
-// #table-svg {
-//     height: 15vh;
-//     width: 95vw;
-// }
