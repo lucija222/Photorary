@@ -1,12 +1,13 @@
 import "./PhotoFrame.scss";
-import { selectPhotoById } from "../../../store/photosSlice";
+import { fetchPhotos, selectPhotoById } from "../../../store/photosSlice";
 import { RootState } from "../../../store/store";
-import { useAppSelector } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { Link } from "react-router-dom";
 import { DownloadSvg } from "../../../assets/svg/exports";
 import { MouseEventHandler } from "react";
 import { fetchPhotoForDownload } from "../../../util/helpers/functions/fetchPhotoForDownload";
 import { dowloadAndCleanup } from "../../../util/helpers/functions/triggerDowload";
+import { fetchUsers } from "../../../store/usersSlice";
 
 interface PhotoFrameProps {
     photoId: string;
@@ -16,6 +17,7 @@ const PhotoFrame = ({ photoId }: PhotoFrameProps) => {
     const photo = useAppSelector((state: RootState) =>
         selectPhotoById(state, photoId)
     );
+    const dispatch = useAppDispatch();
     
     const { description, alt_description } = photo;
     const { name, username } = photo.user;
@@ -36,7 +38,6 @@ const PhotoFrame = ({ photoId }: PhotoFrameProps) => {
     };
 
     const handlePhotoDownload: MouseEventHandler<HTMLButtonElement> = async (e) => {
-        e.preventDefault();
         e.stopPropagation();
         
         const imgObjectUrl = await fetchPhotoForDownload(full);        
@@ -44,7 +45,13 @@ const PhotoFrame = ({ photoId }: PhotoFrameProps) => {
         if (imgObjectUrl) {
            dowloadAndCleanup(imgObjectUrl, photoId);
         }
-    }
+    };
+
+    const handleAuthorClick: MouseEventHandler<HTMLAnchorElement> = (e) => {
+        e.stopPropagation();
+        dispatch(fetchUsers({url: `https://api.unsplash.com/users/${username}`, action: "overwrite"}));    
+        dispatch(fetchPhotos({url: `https://api.unsplash.com/users/${username}/photos`, action: "overwrite"}));    
+    };
 
     return (
         <article className="frame-container">
@@ -57,7 +64,7 @@ const PhotoFrame = ({ photoId }: PhotoFrameProps) => {
                     sizes="(max-width: 450px) 400px,"
                 />
                 <address className="author">
-                    <Link to={routerPath}>
+                    <Link to={routerPath} onClick={handleAuthorClick}>
                         <img src={authorPhotoUrl} alt="Author" />
                         <h2>{name}</h2>
                     </Link>

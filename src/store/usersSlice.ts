@@ -2,6 +2,7 @@ import { AppDispatch, RootState } from "./store";
 import { ApiUserObj, ApiUsersArray, FetchThunkArg, InitAdapterState } from "../util/helpers/types";
 import { fetchData } from "../util/helpers/functions/fetchData";
 import { createAsyncThunk, createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { returnPayloadArray } from "../util/helpers/functions/returnPayloadArray";
 
 const usersAdapter = createEntityAdapter<ApiUserObj>();
 
@@ -20,7 +21,7 @@ export const fetchUsers = createAsyncThunk<
     { dispatch: AppDispatch }
 >("users/fetchUsers", async (obj, { dispatch }) => {
     const { url, action } = obj;
-    const data: ApiUsersArray = await fetchData(url, dispatch, "usersSlice");
+    const data = await fetchData(url, dispatch, "usersSlice");
 
     dispatch(
         action === "overwrite"
@@ -33,8 +34,9 @@ const usersSlice = createSlice({
     name: "users",
     initialState,
     reducers: {
-        overwriteUsers(state, action: PayloadAction<ApiUsersArray>) {
-            usersAdapter.setAll(state, action.payload);
+        overwriteUsers(state, action: PayloadAction<ApiUsersArray | ApiUserObj>) {
+            usersAdapter.setAll(state, returnPayloadArray(action.payload));
+            state.loader = false;
         },
         addUsers(state, action: PayloadAction<ApiUsersArray>) {
             usersAdapter.addMany(state, action.payload);
@@ -67,5 +69,10 @@ export const {
     selectIds: selectUsersIds,
 } = usersAdapter.getSelectors((state: RootState) => state.users);
 
+export const selectUserForProfile = (state: RootState) => {
+    const usersArr = selectAllUsers(state);
+    return usersArr[0];
+};
+export const selectUserLoader = (state: RootState) => {return state.users.loader};
 export const { overwriteUsers, addUsers, setTotalUserSearchResults } = usersSlice.actions;
 export default usersSlice.reducer;

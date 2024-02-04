@@ -10,16 +10,16 @@ header {
     padding: 0 40px 0 20px;
     @include width-height(100vw, 60px);
     background-color: #a88173;
-    color: #f5e8df;
     align-items: center;
     border-bottom: 15px solid #E1D5CD;
 
-    h1 {
+    h1 a {
         display: flex;
         align-items: center;
         column-gap: 7px;
         font-size: 24px;
         font-weight: 400;
         font-style: italic;
+        color: #f5e8df;
     }
 }
