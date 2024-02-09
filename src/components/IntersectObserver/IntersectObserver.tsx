@@ -1,8 +1,7 @@
 const IntersectObserver = () => {
-
     return (
         <>
-        
+
         </>
     );
 };

@@ -1,13 +1,17 @@
 .user-container {
-    display: flex;
+    display: inline-flex;
+    flex-direction: column;
     column-gap: 20px;
-    justify-content: center;
+    row-gap: 10px;
+    background-color: #d6c3ba;
+    justify-content: space-evenly;
     align-items: center;
-    padding-bottom: 40px;
-    max-width: 80vw;
-    margin: auto;
+    border-radius: 10px;
+    padding: 20px 22px;
+    max-width: 90vw;
 
     img {
+        width: 75px;
         border-radius: 50%;
     }
 }
@@ -15,24 +19,53 @@
 .user-data {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     row-gap: 10px;
+    max-width: 76%;
+    color: #623131;
 
     h2 {
-        font-size: 22px;
+        font-size: 18px;
     }
 
     .bio{
-        font-size: 20px;
+        font-size: 15px;
+        text-align: center;
     }
 
     .social-container {
         display: flex;
         column-gap: 20px;
+        padding-top: 5px;
 
         svg {
             height: 25px;
             width: 25px;
+            fill: #623131;
+        }
+    }
+}
+
+@media screen and (min-width: 450px) {
+    .user-container {
+    flex-direction: row;
+        max-width: 80vw;
+
+        img {
+            width: 128px;
+        }
+    }
+
+    .user-data {
+        align-items: flex-start;
+
+        .bio{
+            font-size: 20px;
+            text-align: start;
+        }
+
+        h2 {
+            font-size: 22px;
         }
     }
 }

@@ -1,46 +1,25 @@
-# Getting Started with Create React App
+This project is still in development.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Run Photorary
+`npm install` and `npm start`
 
-## Available Scripts
 
-In the project directory, you can run:
+## About app
+### API
+- **Unsplash API** used for data has a quota of 50 calls per hour. If you encounter any issues, it is likely due to hitting this quota. Please try again in the next hour. <br />
 
-### `npm start`
+### Design
+- The design and concept and implementation of the app are original. The intention was to create an environment reminiscent of photographs adorningv a wall in a cozy space. <br />
+- The SVGS at the bottom of the page are custom made using Inkscape. <br />
+- The lamp includes a toggle button to control the lighting. Future versions may extend this feature to include a dark mode option. <br />
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Layout
+- The photo grid dynamically adjusts width and column count, ensuring the elegant display across various viewport sizes, starting from a minimum width of 223 pixels. Additionally, it can easily be further optimized to accomodate even smaller viewports. <br />
+- Each column in the grid utilizes a flexbox container, ensuring images of all sizes and ratios fit seamlessly while preserving a cohesive layout without any unwanted gaps. <br />
+- The fixed position of the header provides easy access and navigation throughout the app. <br />
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Functionalities
+- Explore the feed to discover newly uploaded photographs. <br />
+- Download your favorite photographs with a single click. <br />
+- View photographer profiles to explore more of their work, connect with them on social media and view their portfolios. <br />
+- Utilize the search feature to discover photographs and users based on your specific interests.  <br />
