@@ -8,9 +8,8 @@ const usersAdapter = createEntityAdapter<ApiUserObj>();
 
 const initAdapterState: InitAdapterState = {
     status: "idle",
-    loader: false,
     error: "",
-    totalSearchResults: 0,
+    totalResults: 0,
 };
 
 const initialState = usersAdapter.getInitialState(initAdapterState);
@@ -36,20 +35,22 @@ const usersSlice = createSlice({
     reducers: {
         overwriteUsers(state, action: PayloadAction<ApiUsersArray | ApiUserObj>) {
             usersAdapter.setAll(state, returnPayloadArray(action.payload));
-            state.loader = false;
+            state.status = "succeeded";
         },
         addUsers(state, action: PayloadAction<ApiUsersArray>) {
             usersAdapter.addMany(state, action.payload);
         },
-        setTotalUserSearchResults(state, action:PayloadAction<number>) {
-            state.totalSearchResults = action.payload;
+        setTotalUsersResults(state, action:PayloadAction<number>) {
+            state.totalResults = action.payload;
         },
+        resetUsersStatus (state) {
+            state.status = "idle";
+        }
     },
     extraReducers(builder) {
         builder
             .addCase(fetchUsers.pending, (state) => {
-                state.loader = true;
-                state.status = "pending";
+                state.status = "loading";
             })
             .addCase(fetchUsers.rejected, (state, action) => {
                 state.status = "failed";
@@ -57,9 +58,9 @@ const usersSlice = createSlice({
                     state.error = action.error.message;
                 }
             })
-            .addCase(fetchUsers.fulfilled, (state) => {
-                state.status = "succeeded";
-            });
+            // .addCase(fetchUsers.fulfilled, (state) => {
+            //     state.status = "succeeded";
+            // });
     },
 });
 
@@ -73,6 +74,7 @@ export const selectUserForProfile = (state: RootState) => {
     const usersArr = selectAllUsers(state);
     return usersArr[0];
 };
-export const selectUserLoader = (state: RootState) => {return state.users.loader};
-export const { overwriteUsers, addUsers, setTotalUserSearchResults } = usersSlice.actions;
+
+export const selectUserStatus = (state: RootState) => {return state.users.status};
+export const { overwriteUsers, addUsers, setTotalUsersResults, resetUsersStatus } = usersSlice.actions;
 export default usersSlice.reducer;

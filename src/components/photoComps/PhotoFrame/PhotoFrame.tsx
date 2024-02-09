@@ -1,79 +1,98 @@
 import "./PhotoFrame.scss";
-import { fetchPhotos, selectPhotoById } from "../../../store/photosSlice";
-import { RootState } from "../../../store/store";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { Link } from "react-router-dom";
+import { RootState } from "../../../store/store";
+import { MouseEventHandler, useEffect, useRef } from "react";
 import { DownloadSvg } from "../../../assets/svg/exports";
-import { MouseEventHandler } from "react";
-import { fetchPhotoForDownload } from "../../../util/helpers/functions/fetchPhotoForDownload";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { dowloadAndCleanup } from "../../../util/helpers/functions/triggerDowload";
-import { fetchUsers } from "../../../store/usersSlice";
+import { selectMainLoader, setMainLoader } from "../../../store/loaderSlice";
+import {
+    resetPhotosStatus, selectLastPhotoId, selectPhotoById, selectPhotosStatus,
+} from "../../../store/photosSlice";
+import { fetchPhotoForDownload } from "../../../util/helpers/functions/fetchPhotoForDownload";
 
 interface PhotoFrameProps {
     photoId: string;
 }
 
 const PhotoFrame = ({ photoId }: PhotoFrameProps) => {
+    const dispatch = useAppDispatch();
+    const lastPhotoId = useAppSelector(selectLastPhotoId);
+    const photosStatus = useAppSelector((state) => selectPhotosStatus(state));
+    const loaderStatus = useAppSelector(selectMainLoader);
     const photo = useAppSelector((state: RootState) =>
         selectPhotoById(state, photoId)
     );
-    const dispatch = useAppDispatch();
-    
-    const { description, alt_description } = photo;
-    const { name, username } = photo.user;
-    const { small, regular, full } = photo.urls;
-    const routerPath = `/user/${username}`;
-    const authorPhotoUrl = photo.user.profile_image.small;
+    const lastArticleRef = useRef<HTMLElement | null>(null);
 
     const returnPhotoAlt = (): string => {
+        const description = photo.description;
+        const alt_description = photo.alt_description;
+        const name = photo.user.name;
         if (description) {
             return description;
-
         } else if (alt_description) {
             return alt_description;
-
         } else {
             return `By ${name}`;
         }
     };
 
-    const handlePhotoDownload: MouseEventHandler<HTMLButtonElement> = async (e) => {
+    const handlePhotoDownload: MouseEventHandler<HTMLButtonElement> = async (
+        e
+    ) => {
         e.stopPropagation();
-        
-        const imgObjectUrl = await fetchPhotoForDownload(full);        
+
+        const imgObjectUrl = await fetchPhotoForDownload(photo.urls.full);
 
         if (imgObjectUrl) {
-           dowloadAndCleanup(imgObjectUrl, photoId);
+            dowloadAndCleanup(imgObjectUrl, photoId);
         }
     };
 
     const handleAuthorClick: MouseEventHandler<HTMLAnchorElement> = (e) => {
         e.stopPropagation();
-        dispatch(fetchUsers({url: `https://api.unsplash.com/users/${username}`, action: "overwrite"}));    
-        dispatch(fetchPhotos({url: `https://api.unsplash.com/users/${username}/photos`, action: "overwrite"}));    
+        dispatch(resetPhotosStatus());
     };
 
+    useEffect(() => {
+        if (lastArticleRef.current && loaderStatus) {
+            dispatch(setMainLoader(false));
+        }
+    }, [dispatch, photoId, lastPhotoId, loaderStatus]);
+
     return (
-        <article className="frame-container">
-            <div className="frame">
-                <img
-                    src={regular}
-                    alt={returnPhotoAlt()}
-                    className="photograph"
-                    srcSet={`${small} 400w, ${regular} 1080w`}
-                    sizes="(max-width: 450px) 400px,"
-                />
-                <address className="author">
-                    <Link to={routerPath} onClick={handleAuthorClick}>
-                        <img src={authorPhotoUrl} alt="Author" />
-                        <h2>{name}</h2>
-                    </Link>
-                    <button type="button" onClick={handlePhotoDownload}>
-                        <DownloadSvg />
-                    </button>
-                </address>
-            </div>
-        </article>
+        <>
+            {photosStatus === "succeeded" && (
+                <article
+                    className="frame-container"
+                    ref={photoId === lastPhotoId ? lastArticleRef : null}
+                >
+                    <div className="frame">
+                        <img
+                            src={photo.urls.small_object_url}
+                            alt={returnPhotoAlt()}
+                            className="photograph"
+                        />
+                        <address className="author">
+                            <Link
+                                to={`/user/${photo.user.username}`}
+                                onClick={handleAuthorClick}
+                            >
+                                <img
+                                    src={photo.user.profile_image.small}
+                                    alt="Author"
+                                />
+                                <h2>{photo.user.name}</h2>
+                            </Link>
+                            <button type="button" onClick={handlePhotoDownload}>
+                                <DownloadSvg />
+                            </button>
+                        </address>
+                    </div>
+                </article>
+            )}
+        </>
     );
 };
 

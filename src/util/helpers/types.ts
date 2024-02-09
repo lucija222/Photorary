@@ -1,5 +1,5 @@
 //--------------------------------------------------------------SLICES
-type Status = "idle" | "pending" | "succeeded" | "failed";
+export type Status = "idle" | "loading" | "succeeded" | "failed";
 
 export interface FetchThunkArg {
     url: string;
@@ -8,9 +8,8 @@ export interface FetchThunkArg {
 
 export interface InitAdapterState {
     status: Status;
-    loader: boolean;
     error: string;
-    totalSearchResults: number;
+    totalResults: number;
 }
 
 //--------------------------------------------------------API RESPONSE TYPES
@@ -37,6 +36,12 @@ export interface ApiPhotoObj {
     };
     user: ApiUserObj;
 }
+
+export interface PhotoObj extends ApiPhotoObj {
+    urls: ApiPhotoObj["urls"] & {
+        small_object_url: string;
+    }
+}
 export interface ApiUserObj {
     id: string;
     username: string;
@@ -47,7 +52,9 @@ export interface ApiUserObj {
     profile_image: UserProfileImage;
     instagram_username: string | null;
     portfolio_url: string | null;
+    total_photos: number;
 }
 
 export type ApiPhotosArray = ApiPhotoObj[];
+export type PhotosArray = PhotoObj[];
 export type ApiUsersArray = ApiUserObj[];

@@ -1,24 +1,19 @@
 import "./User.scss";
-import { useAppSelector } from "../../../store/hooks";
-import { ApiUserObj } from "../../../util/helpers/types";
-import Loader from "../../UIComponents/Loader/Loader";
 import PhotoGrid from "../../photoComps/PhotoGrid/PhotoGrid";
 import UserSocialLink from "../UserSocialLink/UserSocialLink";
-import { selectUserForProfile, selectUserLoader, } from "../../../store/usersSlice";
+import { useAppSelector } from "../../../store/hooks";
+import { selectUserForProfile } from "../../../store/usersSlice";
 
-const User = () => {
-    
-    const isLoadingUsers = useAppSelector((state) => selectUserLoader(state));
-    const user: ApiUserObj = useAppSelector((state) =>
-        selectUserForProfile(state)
-    );
+interface UserProps {
+    isUserLoading: boolean,
+}
+
+const User = ({ isUserLoading }: UserProps) => {
+    const user = useAppSelector((state) => selectUserForProfile(state));
 
     return (
         <>
-            {isLoadingUsers ? (
-                <Loader />
-            ) : (
-                <>
+            {!isUserLoading && (
                     <div className="user-container">
                         <img src={user.profile_image.large} alt="User" />
                         <div className="user-data">
@@ -46,9 +41,8 @@ const User = () => {
                             </div>
                         </div>
                     </div>
-                    <PhotoGrid />
-                </>
             )}
+            <PhotoGrid />
         </>
     );
 };
