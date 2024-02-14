@@ -1,0 +1,29 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+#search-links-wrapper {
+    @include width-height(180px, 38px);
+    display: flex;
+    justify-content: center;
+
+    a {
+        padding: 5px 14px;
+        font-size: 20px;
+        border: none;
+        color: $light-font-color;
+        background-color: #c5a79d;
+    }
+
+    a:first-child {
+        border-radius: 17px 0 0 17px;
+    }
+
+    a:last-child {
+        border-radius: 0 17px 17px 0;
+    }
+
+    a.active {
+        background-color: #b68b7b;
+    }
+}

@@ -6,24 +6,21 @@ import { DownloadSvg } from "../../../assets/svg/exports";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { dowloadAndCleanup } from "../../../util/helpers/functions/triggerDowload";
 import { selectMainLoader, setMainLoader } from "../../../store/loaderSlice";
-import {
-    resetPhotosStatus, selectLastPhotoId, selectPhotoById, selectPhotosStatus,
-} from "../../../store/photosSlice";
+import { resetPhotosStatus, selectPhotoById } from "../../../store/photosSlice";
 import { fetchPhotoForDownload } from "../../../util/helpers/functions/fetchPhotoForDownload";
 
 interface PhotoFrameProps {
-    photoId: string;
+    id: string;
+    isLastElem: boolean;
 }
 
-const PhotoFrame = ({ photoId }: PhotoFrameProps) => {
+const PhotoFrame = ({ id, isLastElem }: PhotoFrameProps) => {
     const dispatch = useAppDispatch();
-    const lastPhotoId = useAppSelector(selectLastPhotoId);
-    const photosStatus = useAppSelector((state) => selectPhotosStatus(state));
-    const loaderStatus = useAppSelector(selectMainLoader);
+    const isLoaderOn = useAppSelector(selectMainLoader);
     const photo = useAppSelector((state: RootState) =>
-        selectPhotoById(state, photoId)
+        selectPhotoById(state, id)
     );
-    const lastArticleRef = useRef<HTMLElement | null>(null);
+    const lastPhotoRef = useRef<HTMLElement | null>(null);
 
     const returnPhotoAlt = (): string => {
         const description = photo.description;
@@ -46,7 +43,7 @@ const PhotoFrame = ({ photoId }: PhotoFrameProps) => {
         const imgObjectUrl = await fetchPhotoForDownload(photo.urls.full);
 
         if (imgObjectUrl) {
-            dowloadAndCleanup(imgObjectUrl, photoId);
+            dowloadAndCleanup(imgObjectUrl, id);
         }
     };
 
@@ -56,43 +53,41 @@ const PhotoFrame = ({ photoId }: PhotoFrameProps) => {
     };
 
     useEffect(() => {
-        if (lastArticleRef.current && loaderStatus) {
-            dispatch(setMainLoader(false));
+        if (lastPhotoRef.current && isLoaderOn) {
+            setTimeout(() => {
+                dispatch(setMainLoader(false));
+            }, 1000)
         }
-    }, [dispatch, photoId, lastPhotoId, loaderStatus]);
+    }, [dispatch, isLoaderOn]);
 
     return (
-        <>
-            {photosStatus === "succeeded" && (
-                <article
-                    className="frame-container"
-                    ref={photoId === lastPhotoId ? lastArticleRef : null}
-                >
-                    <div className="frame">
+        <article
+            className="frame-container"
+            ref={isLastElem ? lastPhotoRef : null}
+        >
+            <div className="frame">
+                <img
+                    src={photo.urls.small_object_url}
+                    alt={returnPhotoAlt()}
+                    className="photograph"
+                />
+                <address className="author">
+                    <Link
+                        to={`/user/${photo.user.username}`}
+                        onClick={handleAuthorClick}
+                    >
                         <img
-                            src={photo.urls.small_object_url}
-                            alt={returnPhotoAlt()}
-                            className="photograph"
+                            src={photo.user.profile_image.small}
+                            alt="Author"
                         />
-                        <address className="author">
-                            <Link
-                                to={`/user/${photo.user.username}`}
-                                onClick={handleAuthorClick}
-                            >
-                                <img
-                                    src={photo.user.profile_image.small}
-                                    alt="Author"
-                                />
-                                <h2>{photo.user.name}</h2>
-                            </Link>
-                            <button type="button" onClick={handlePhotoDownload}>
-                                <DownloadSvg />
-                            </button>
-                        </address>
-                    </div>
-                </article>
-            )}
-        </>
+                        <h2>{photo.user.name}</h2>
+                    </Link>
+                    <button type="button" onClick={handlePhotoDownload}>
+                        <DownloadSvg />
+                    </button>
+                </address>
+            </div>
+        </article>
     );
 };
 

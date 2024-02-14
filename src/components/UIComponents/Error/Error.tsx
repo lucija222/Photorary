@@ -1,12 +1,15 @@
 import "./Error.scss";
 
 const Error = () => {
-    
-	return (
-		<>
-		
-		</>
-	);
+
+    return (
+        <div id="error-wrapper">
+            <p>
+                Oops, something went wrong... <br />
+                Please refresh the page.
+            </p>
+        </div>
+    );
 };
 
 export default Error;

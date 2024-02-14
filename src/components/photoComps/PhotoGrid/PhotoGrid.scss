@@ -11,9 +11,18 @@
     padding-top: 40px;
 }
 
+#search-links-wrapper + #photos-grid {
+    padding-top: 20px;
+}
+
 @media screen and (min-width: 450px) {
     #photos-grid {
         --col-min-width: 330px;
+    }
+}
+
+@media screen and (min-width: 890px) {
+    #photos-grid {
         width: 80vw;
     }
 }

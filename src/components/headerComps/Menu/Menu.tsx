@@ -1,21 +1,14 @@
 import "./Menu.scss";
 import Nav from "../Nav/Nav";
 import { XSvg } from "../../../assets/svg/exports";
-import {
-    Dispatch,
-    MouseEventHandler,
-    SetStateAction,
-    useEffect,
-    useRef,
-} from "react";
+import { MouseEventHandler, useEffect, useRef, } from "react";
 
 interface MenuProps {
     isMenuOpen: boolean;
-    setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
     handleMenuToggle: MouseEventHandler<HTMLElement>;
 }
 
-const Menu = ({ isMenuOpen, setIsMenuOpen, handleMenuToggle }: MenuProps) => {
+const Menu = ({ isMenuOpen, handleMenuToggle }: MenuProps) => {
     const menuRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -31,7 +24,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen, handleMenuToggle }: MenuProps) => {
             <button type="button" onClick={handleMenuToggle}>
                 <XSvg />
             </button>
-            <Nav />
+            <Nav handleMenuToggle={handleMenuToggle}/>
         </div>
     );
 };

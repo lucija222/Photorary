@@ -1,0 +1,33 @@
+form {
+    max-width: 65%;
+    flex: 1;
+}
+
+#search-bar {
+    background: url("../../../assets/svg/search.svg") no-repeat 10px center/20px;
+    background-color: white;
+    height: 28px;
+    width: 100%;
+    border: none;
+    border-radius: 15px;
+    text-indent: 37px;
+    outline: none;
+    padding-right: 10px;
+
+    &::placeholder {
+        font-style: italic;
+        color: #8f8b8b;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    form {
+        max-width: 600px;
+    }
+}
+
+@media screen and (min-width: 990px) {
+    form {
+        transform: translateX(-50px);
+    }
+}

@@ -6,20 +6,41 @@ header {
     left: 0;
     z-index: 5;
     display: flex;
+    column-gap: 20px;
     justify-content: space-between;
-    padding: 0 40px 0 20px;
+    padding: 0 20px;
     @include width-height(100vw, 60px);
-    background-color: #a88173;
+    background-color: $middle-brown;
     align-items: center;
-    border-bottom: 15px solid #E1D5CD;
+    border-bottom: 15px solid $main-background;
 
     h1 a {
         display: flex;
         align-items: center;
         column-gap: 7px;
-        font-size: 24px;
-        font-weight: 400;
         font-style: italic;
         color: #f5e8df;
+
+        span {
+            font-size: 23px;
+            font-weight: 400;
+            display: none;
+        }
+    }
+}
+
+@media screen and (min-width: 450px) {
+    header {
+        padding: 0 40px 0 20px;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    header {
+        column-gap: 30px;
+
+        h1 a span {
+            display: inline;
+        }
     }
 }

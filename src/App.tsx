@@ -1,7 +1,10 @@
 import "./App.scss";
+import { RouterProvider, createBrowserRouter, } from "react-router-dom";
+import { Root, Feed, Profile, About } from "./pages/exports";
+import SearchPhotos from "./components/searchComps/SearchPhotos";
+import SearchUsers from "./components/searchComps/SearchUsers";
+import SearchToggler from "./components/searchComps/SearchToggler/SearchToggler";
 import Error from "./components/UIComponents/Error/Error";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Root, Feed, Profile, About, SearchResults } from "./pages/exports";
 
 const App = () => {
 
@@ -20,13 +23,23 @@ const App = () => {
                     element: <Profile />,
                 },
                 {
-                    path: "/about",
-                    element: <About />
+                    path: "about",
+                    element: <About />,
                 },
                 {
-                    path: "/search",
-                    element: <SearchResults />
-                }
+                    path: "search",
+                    element: <SearchToggler/>,
+                    children: [
+                        { 
+                            path: "photos", 
+                            element: <SearchPhotos /> 
+                        },
+                        { 
+                            path: "users", 
+                            element: <SearchUsers /> 
+                        },
+                    ],
+                },
             ],
         },
     ]);

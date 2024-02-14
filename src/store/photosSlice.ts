@@ -1,8 +1,12 @@
 import { AppDispatch, RootState } from "./store";
 import { fetchData } from "../util/helpers/functions/fetchData";
-import { createObjectURLs } from "../util/helpers/functions/createObjectURLs";
-import { createAsyncThunk, createEntityAdapter, createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { InitAdapterState, ApiPhotosArray, FetchThunkArg, PhotosArray, PhotoObj } from "../util/helpers/types";
+import { createPhotoObjectUrls } from "../util/helpers/functions/createPhotoObjectUrls";
+import {
+    InitAdapterState, ApiPhotosArray, FetchThunkArg, PhotosArray, PhotoObj,
+} from "../util/helpers/types";
+import {
+    createAsyncThunk, createEntityAdapter, createSlice, PayloadAction,
+} from "@reduxjs/toolkit";
 
 const photosAdapter = createEntityAdapter<PhotoObj>();
 const initAdapterState: InitAdapterState = {
@@ -14,42 +18,29 @@ const initAdapterState: InitAdapterState = {
 const initialState = photosAdapter.getInitialState(initAdapterState);
 
 export const fetchPhotos = createAsyncThunk<
-    void,
+    PhotosArray,
     FetchThunkArg,
     { dispatch: AppDispatch }
 >("photos/fetchPhotos", async (obj, { dispatch }) => {
-    const { url, action } = obj;
+    const { url } = obj;
     const data: ApiPhotosArray = await fetchData(url, dispatch, "photosSlice");
-    const dataWithObjUrls: PhotosArray = await createObjectURLs(data);
+    const dataWithObjUrls: PhotosArray = await createPhotoObjectUrls(data);
 
-    dispatch(
-        action === "overwrite"
-            ? overwritePhotos(dataWithObjUrls)
-            : addPhotos(dataWithObjUrls)
-    );
+    return dataWithObjUrls;
 });
 
 const photosSlice = createSlice({
     name: "photos",
     initialState,
     reducers: {
-        overwritePhotos(state, action: PayloadAction<PhotosArray>) {
-            state.ids.forEach((id) => {
-                const photo = state.entities[id];
-                URL.revokeObjectURL(photo.urls.small_object_url);
-            });
-
-            photosAdapter.setAll(state, action.payload);
-            state.status = "succeeded";
-        },
-        addPhotos(state, action: PayloadAction<PhotosArray>) {
-            photosAdapter.addMany(state, action.payload);
-        },
         setTotalPhotosResults(state, action: PayloadAction<number>) {
             state.totalResults = action.payload;
         },
         resetPhotosStatus(state) {
             state.status = "idle";
+        },
+        resetPhotosAndUsersStatus(state) {
+            state.status = "idle";    
         },
     },
     extraReducers(builder) {
@@ -58,14 +49,35 @@ const photosSlice = createSlice({
                 state.status = "loading";
             })
             .addCase(fetchPhotos.rejected, (state, action) => {
-                state.status = "failed";
                 if (action.error.message) {
                     state.error = action.error.message;
                 }
+                state.status = "failed";
+            })
+            .addCase(fetchPhotos.fulfilled, (state, action) => {
+                const actionType = action.meta.arg.action;
+                const data = action.payload;
+
+                switch (actionType) {
+                    case "overwrite":
+                        if (state.ids.length > 0) {
+                            state.ids.forEach((id) => {
+                                const photo = state.entities[id];
+                                URL.revokeObjectURL(
+                                    photo.urls.small_object_url
+                                );
+                            });
+                        }
+                        photosAdapter.setAll(state, data);
+                        break;
+
+                    case "add":
+                        photosAdapter.addMany(state, data);
+                        break;
+                }
+                
+                state.status = "succeeded";
             });
-        // .addCase(fetchPhotos.fulfilled, (state) => {
-        //     state.status = "succeeded";
-        // });
     },
 });
 
@@ -78,15 +90,11 @@ export const {
 export const selectPhotosStatus = (state: RootState) => {
     return state.photos.status;
 };
-export const selectLastPhotoId = createSelector(selectPhotosIds, (idArray) => {
-    return idArray[idArray.length - 1];
-});
 
 export const {
-    overwritePhotos,
-    addPhotos,
     setTotalPhotosResults,
     resetPhotosStatus,
+    resetPhotosAndUsersStatus
 } = photosSlice.actions;
 
 export default photosSlice.reducer;

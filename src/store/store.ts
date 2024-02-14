@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import photosReducer from "./photosSlice";
 import usersReducer from "./usersSlice";
 import loaderReducer from "./loaderSlice";
+import urlReducer from "./urlSlice";
 
 const store = configureStore({
     reducer: {
         photos: photosReducer,
         users: usersReducer,
         loader: loaderReducer,
+        url: urlReducer
     },
 });
 

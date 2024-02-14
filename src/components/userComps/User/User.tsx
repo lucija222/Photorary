@@ -1,49 +1,63 @@
 import "./User.scss";
-import PhotoGrid from "../../photoComps/PhotoGrid/PhotoGrid";
+import { useEffect, useRef } from "react";
+import { selectUserById } from "../../../store/usersSlice";
 import UserSocialLink from "../UserSocialLink/UserSocialLink";
-import { useAppSelector } from "../../../store/hooks";
-import { selectUserForProfile } from "../../../store/usersSlice";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { selectMainLoader, setMainLoader } from "../../../store/loaderSlice";
 
 interface UserProps {
-    isUserLoading: boolean,
+    id: string;
+    isLastElem?: boolean;
 }
 
-const User = ({ isUserLoading }: UserProps) => {
-    const user = useAppSelector((state) => selectUserForProfile(state));
+const User = ({ id, isLastElem }: UserProps) => {
+    const dispatch = useAppDispatch();
+    const user = useAppSelector((state) => selectUserById(state, id));
+    const lastUserRef = useRef<HTMLDivElement | null>(null);
+    const isLoaderOn = useAppSelector((state) => selectMainLoader(state));
+
+    const {
+        name, bio, profile_image, instagram_username,
+        twitter_username, portfolio_url,
+    } = user;
+
+
+    useEffect(() => {
+        if (lastUserRef.current && isLoaderOn) {
+            setTimeout(() => {
+                dispatch(setMainLoader(false));
+            }, 1000)
+        }
+    }, [dispatch, isLoaderOn]);
 
     return (
-        <>
-            {!isUserLoading && (
-                    <div className="user-container">
-                        <img src={user.profile_image.large} alt="User" />
-                        <div className="user-data">
-                            <h2>{user.name}</h2>
-                            {user.bio && <p className="bio">{user.bio}</p>}
-                            <div className="social-container">
-                                {user.instagram_username && (
-                                    <UserSocialLink
-                                        url={`https://www.instagram.com/${user.instagram_username}/`}
-                                        linkType="instagram"
-                                    />
-                                )}
-                                {user.twitter_username && (
-                                    <UserSocialLink
-                                        url={`https://twitter.com/${user.twitter_username}`}
-                                        linkType="twitter"
-                                    />
-                                )}
-                                {user.portfolio_url && (
-                                    <UserSocialLink
-                                        url={user.portfolio_url}
-                                        linkType="portfolio"
-                                    />
-                                )}
-                            </div>
-                        </div>
-                    </div>
-            )}
-            <PhotoGrid />
-        </>
+        <div className="user-container" ref={isLastElem ? lastUserRef : null}>
+            <img src={profile_image.object_url} alt="User" />
+            <div className="user-data">
+                <h2>{name}</h2>
+                {bio && <p className="bio">{bio}</p>}
+                <div className="social-container">
+                    {instagram_username && (
+                        <UserSocialLink
+                            url={`https://www.instagram.com/${instagram_username}`}
+                            linkType="instagram"
+                        />
+                    )}
+                    {twitter_username && (
+                        <UserSocialLink
+                            url={`https://twitter.com/${twitter_username}`}
+                            linkType="twitter"
+                        />
+                    )}
+                    {portfolio_url && (
+                        <UserSocialLink
+                            url={portfolio_url}
+                            linkType="portfolio"
+                        />
+                    )}
+                </div>
+            </div>
+        </div>
     );
 };
 
