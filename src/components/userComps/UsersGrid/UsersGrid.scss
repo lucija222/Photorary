@@ -1,0 +1,35 @@
+#users-grid {
+    --column-min-width: 200px;
+    width: 90vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--column-min-width), 1fr));
+    gap: 25px;
+    padding: 40px 0 20vh 0;
+}
+
+#users-grid {
+    .user-container {
+        flex-direction: column;
+        max-width: none;
+
+        img {
+            width: 75px;
+        }
+    }
+
+    .user-data {
+        align-items: center;
+        max-width: 90%;
+
+        .bio {
+            text-align: center;
+        }
+    }
+}
+
+@media screen and (min-width: 410px) {
+    #users-grid {
+        --column-min-width: 300px;
+        width: 80vw;
+    }
+}

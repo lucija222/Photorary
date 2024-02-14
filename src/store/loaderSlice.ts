@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
+import { resetPhotosAndUsersStatus, resetPhotosStatus } from "./photosSlice";
+import { resetUsersStatus } from "./usersSlice";
 
 const initialState = {
     mainLoader: true,
@@ -10,12 +12,24 @@ export const loaderSlice = createSlice({
     name: "loader",
     initialState,
     reducers: {
-        setMainLoader(state, action) {
+        setMainLoader(state, action) {       
             state.mainLoader = action.payload;
         },
         setScrollLoader(state, action) {
             state.scrollLoader = action.payload;
         }
+    },
+    extraReducers(builder) {
+        builder 
+            .addCase(resetPhotosStatus, (state) => {
+                state.mainLoader = true;
+            })
+            .addCase(resetUsersStatus, (state) => {
+                state.mainLoader = true;
+            })
+            .addCase(resetPhotosAndUsersStatus, (state) => {
+                state.mainLoader = true;
+            })
     }
 });
 

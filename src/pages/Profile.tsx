@@ -1,52 +1,48 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { setMainLoader } from "../store/loaderSlice";
 import User from "../components/userComps/User/User";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchPhotos, resetPhotosStatus, selectPhotosStatus } from "../store/photosSlice";
-import { fetchUsers, resetUsersStatus, selectUserStatus } from "../store/usersSlice";
+import { selectActionType, selectPageNum } from "../store/urlSlice";
+import PhotoGrid from "../components/photoComps/PhotoGrid/PhotoGrid";
+import {
+    fetchUsers, resetUsersStatus, selectUserForProfile, selectUsersStatus,
+} from "../store/usersSlice";
 
 const Profile = () => {
     const { username } = useParams();
     const dispatch = useAppDispatch();
-    const usersStatus = useAppSelector((state) => selectUserStatus(state));
-    const photosStatus = useAppSelector((state) => selectPhotosStatus(state));
-    const isUserLoading = usersStatus !== "succeeded";
+    const userId = useAppSelector((state) => selectUserForProfile(state));
+    const usersStatus = useAppSelector((state) => selectUsersStatus(state));
+    const isUserLoaded = usersStatus === "succeeded";
+
+    const pageNum = useAppSelector((state) => selectPageNum(state));
+    const action = useAppSelector((state) => selectActionType(state));
+    const photosUrl = `https://api.unsplash.com/users/${username}/photos?page=${pageNum}&per_page=30`;
+    const payload = { url: photosUrl, action: action };
 
     useEffect(() => {
-            if (usersStatus === "idle") {
-                dispatch(
-                    fetchUsers({
-                        url: `https://api.unsplash.com/users/${username}`,
-                        action: "overwrite",
-                    })
-                );
-            }
-
-            if (photosStatus === "idle") {
-                dispatch(
-                    fetchPhotos({
-                        url: `https://api.unsplash.com/users/${username}/photos?page=1&per_page=30`,
-                        action: "overwrite",
-                    })
-                );
-            }
+        if (usersStatus === "idle") {
+            dispatch(
+                fetchUsers({
+                    url: `https://api.unsplash.com/users/${username}`,
+                    action: "overwrite",
+                })
+            );
+        }
 
         return () => {
-            const shouldResetUser =
-                usersStatus === "failed" || usersStatus === "succeeded";
-            const shouldResetPhotos =
-                photosStatus === "failed" || photosStatus === "succeeded";
-
-            if (shouldResetUser && shouldResetPhotos) {
+            if (usersStatus === "failed" || usersStatus === "succeeded") {
                 dispatch(resetUsersStatus());
-                dispatch(resetPhotosStatus());
-                dispatch(setMainLoader(true));
             }
         };
-    }, [dispatch, username, usersStatus, photosStatus]);
+    }, [dispatch, username, usersStatus]);
 
-    return <User isUserLoading={isUserLoading} />;
+    return (
+        <>
+            {isUserLoaded && <User id={userId} />}
+            <PhotoGrid payload={payload} />
+        </>
+    );
 };
 
 export default Profile;

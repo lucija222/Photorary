@@ -1,40 +1,14 @@
-import { useEffect } from "react";
 import PhotoGrid from "../components/photoComps/PhotoGrid/PhotoGrid";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import {
-    fetchPhotos, resetPhotosStatus, selectPhotosStatus,
-} from "../store/photosSlice";
-import { setMainLoader } from "../store/loaderSlice";
+import { useAppSelector } from "../store/hooks";
+import { selectActionType, selectPageNum } from "../store/urlSlice";
 
 const Feed = () => {
-    const dispatch = useAppDispatch();
-    const photosStatus = useAppSelector((state) =>
-        selectPhotosStatus(state)
-    );
+    const pageNum = useAppSelector((state) => selectPageNum(state));
+    const action = useAppSelector((state) => selectActionType(state));
+    const url = `https://api.unsplash.com/photos?page=${pageNum}&per_page=30`;
+    const payload = { url: url, action: action };
 
-    useEffect(() => {
-            if (photosStatus === "idle") {
-                dispatch(
-                    fetchPhotos({
-                        url: "https://api.unsplash.com/photos?page=2&per_page=31",
-                        action: "overwrite",
-                    })
-                );
-            }
-
-        return () => {
-            if (photosStatus === "failed" || photosStatus === "succeeded") {
-                dispatch(resetPhotosStatus());
-                dispatch(setMainLoader(true));
-            }
-        };
-    }, [dispatch, photosStatus]);
-
-    return (
-        <>
-            <PhotoGrid />
-        </>
-    );
+    return <PhotoGrid payload={payload} />;
 };
 
 export default Feed;

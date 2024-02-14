@@ -1,7 +1,11 @@
 @use "../../../util/helpers/sassHelpers.scss";
 
-.photo-grid-column {
+.photo-grid-column, .user-grid-column {
     @extend %flex-column;
     justify-content: flex-start;
     row-gap: 25px;
+}
+
+#no-results {
+    font-size: 20px;
 }

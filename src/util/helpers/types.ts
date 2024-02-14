@@ -1,6 +1,5 @@
 //--------------------------------------------------------------SLICES
 export type Status = "idle" | "loading" | "succeeded" | "failed";
-
 export interface FetchThunkArg {
     url: string;
     action: "overwrite" | "add";
@@ -55,6 +54,13 @@ export interface ApiUserObj {
     total_photos: number;
 }
 
+export interface UserObj extends ApiUserObj {
+    profile_image: ApiUserObj["profile_image"] & {
+        object_url: string;
+    }
+}
+
 export type ApiPhotosArray = ApiPhotoObj[];
 export type PhotosArray = PhotoObj[];
 export type ApiUsersArray = ApiUserObj[];
+export type UsersArray = UserObj[];

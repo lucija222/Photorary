@@ -8,8 +8,7 @@ export const fetchData = async (
     dispatch: AppDispatch,
     slice: "usersSlice" | "photosSlice"
 ) => {    
-    
-    const response = await fetch(url, authHeader);
+    const response = await fetch(url, authHeader);    
     const data = await response.json();
     const isPhotosSlice = slice === "photosSlice";
 
@@ -26,8 +25,8 @@ export const fetchData = async (
     } else if (!isPhotosSlice) { //Set num of photos for a profile
         dispatch(setTotalPhotosResults(data.total_photos));
 
-    } else { //Reset - for feed when there's no limit
-        dispatch(handleResultsTotal(0));
+    } else { //For feed
+        dispatch(handleResultsTotal(1000));
     }
 
     return data;

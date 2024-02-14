@@ -1,3 +1,7 @@
+$light-font-color: #f5e8df;
+$middle-brown: #A88173;
+$main-background: #e1d5cd;
+
 @mixin width-min-max ($min, $max) {
     min-width: $min;
     max-width: $max;

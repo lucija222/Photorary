@@ -1,5 +1,7 @@
+@use "../src/util/helpers/sassHelpers.scss" as *;
+
 body {
-    background-color: #e1d5cd;
+    background-color: $main-background;
     font-family: 'Work Sans', sans-serif;
     overflow-x: hidden;
 

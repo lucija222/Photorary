@@ -3,6 +3,7 @@
 #light-div {
     position: fixed;
     z-index: 4;
+    left: 0;
     bottom: 6vh;
     @include width-height(300px, 300px);
     border: 2px solid black;
@@ -70,6 +71,6 @@
     }
 
     #light-div {
-        bottom: 14vh;
+        bottom: 13vh;
     }
 }

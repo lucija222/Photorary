@@ -1,13 +1,18 @@
+import { MouseEventHandler } from "react";
 import "./Nav.scss";
 import { Link } from "react-router-dom";
 
-const Nav = () => {
+interface NavProps {
+    handleMenuToggle: MouseEventHandler<HTMLElement>;
+}
+
+const Nav = ({ handleMenuToggle }: NavProps) => {
 
     return (
         <nav>
-            <ul>
+            <ul onClick={handleMenuToggle}>
                 <li><Link to="/about">About</Link></li>
-                <li><Link to="/search">Search</Link></li>
+                <li><Link to="/search/photos">Search</Link></li>
             </ul>
         </nav>
     );
