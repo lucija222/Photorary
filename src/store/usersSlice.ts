@@ -1,21 +1,16 @@
 import { AppDispatch, RootState } from "./store";
 import { fetchData } from "../util/helpers/functions/fetchData";
-import {
-    ApiUserObj, ApiUsersArray, FetchThunkArg, InitAdapterState, UserObj, UsersArray,
-} from "../util/helpers/types";
-import {
-    createAsyncThunk, createEntityAdapter, createSlice, PayloadAction,
-} from "@reduxjs/toolkit";
 import { returnPayloadArray } from "../util/helpers/functions/returnPayloadArray";
-import { resetPhotosAndUsersStatus } from "./photosSlice";
 import { createUserObjectUrls } from "../util/helpers/functions/createUserObjectUrls";
+import { createAsyncThunk, createEntityAdapter, createSelector, createSlice, } from "@reduxjs/toolkit";
+import { ApiUserObj, ApiUsersArray, FetchThunkArg, InitAdapterState, Status, UserObj, UsersArray } from "../util/helpers/types";
+import { incrementPageNum } from "./urlSlice";
 
 const usersAdapter = createEntityAdapter<UserObj>();
 
 const initAdapterState: InitAdapterState = {
     status: "idle",
     error: "",
-    totalResults: 0,
 };
 
 const initialState = usersAdapter.getInitialState(initAdapterState);
@@ -24,26 +19,35 @@ export const fetchUsers = createAsyncThunk<
     UsersArray,
     FetchThunkArg,
     { dispatch: AppDispatch }
->("users/fetchUsers", async (obj, { dispatch }) => {
-    const { url } = obj;
-    const data: ApiUserObj | ApiUsersArray = await fetchData(
-        url,
-        dispatch,
-        "usersSlice"
-    );
+>(
+    "users/fetchUsers",
+    async (obj, { dispatch }) => {
+        const { url } = obj;
+        const data: ApiUserObj | ApiUsersArray = await fetchData(
+            url,
+            dispatch,
+            "usersSlice"
+        );
 
-    const dataArr: ApiUsersArray = returnPayloadArray(data);
-    const dataWithObjUrls: UsersArray = await createUserObjectUrls(dataArr);
-    return dataWithObjUrls;
-});
+        const dataArr: ApiUsersArray = returnPayloadArray(data);
+        const dataWithObjUrls: UsersArray = await createUserObjectUrls(dataArr);
+        return dataWithObjUrls;
+    },
+    {
+        condition: (obj, { getState }) => {
+            const state = getState() as RootState;
+            const usersStatus = state.users.status;
+            if (usersStatus !== "idle") {
+                return false;
+            }
+        },
+    }
+);
 
 const usersSlice = createSlice({
     name: "users",
     initialState,
     reducers: {
-        setTotalUsersResults(state, action: PayloadAction<number>) {
-            state.totalResults = action.payload;
-        },
         resetUsersStatus(state) {
             state.status = "idle";
         },
@@ -65,7 +69,6 @@ const usersSlice = createSlice({
 
                 switch (actionType) {
                     case "overwrite":
-                        // usersAdapter.setAll(state, returnPayloadArray(data));
                         usersAdapter.setAll(state, data);
                         break;
 
@@ -76,10 +79,15 @@ const usersSlice = createSlice({
 
                 state.status = "succeeded";
             })
-            .addCase(resetPhotosAndUsersStatus, (state) => {
+            .addCase(incrementPageNum, (state) => {
                 state.status = "idle";
             })
     },
+    selectors: {
+        selectUsersStatus: (state): Status => {
+            return state.status;
+        },
+    }
 });
 
 export const {
@@ -88,14 +96,25 @@ export const {
     selectIds: selectUsersIds,
 } = usersAdapter.getSelectors((state: RootState) => state.users);
 
-export const selectUserForProfile = (state: RootState) => {
+export const { resetUsersStatus } = usersSlice.actions;
+export const { selectUsersStatus } = usersSlice.selectors;
+
+export const selectUserForProfile = (state: RootState): string => {
     const usersIds = selectUsersIds(state);
     return usersIds[0];
 };
 
-export const selectUsersStatus = (state: RootState) => {
-    return state.users.status;
-};
+export const selectCheckUsersStatus = (statusType: Status) =>
+    createSelector(selectUsersStatus, (status) => {
+        return status === statusType;
+    });
 
-export const { setTotalUsersResults, resetUsersStatus } = usersSlice.actions;
+export const selectIsNoUserResults = createSelector(
+    [selectUsersStatus, selectUsersIds],
+    (status, idArr) => {
+        return status === "succeeded" && idArr.length === 0;
+    }
+);
+
+
 export default usersSlice.reducer;

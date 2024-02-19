@@ -1,18 +1,14 @@
 import { AppDispatch, RootState } from "./store";
+import { incrementPageNum } from "./urlSlice";
 import { fetchData } from "../util/helpers/functions/fetchData";
 import { createPhotoObjectUrls } from "../util/helpers/functions/createPhotoObjectUrls";
-import {
-    InitAdapterState, ApiPhotosArray, FetchThunkArg, PhotosArray, PhotoObj,
-} from "../util/helpers/types";
-import {
-    createAsyncThunk, createEntityAdapter, createSlice, PayloadAction,
-} from "@reduxjs/toolkit";
+import { createAsyncThunk, createEntityAdapter, createSelector, createSlice, } from "@reduxjs/toolkit";
+import { InitAdapterState, ApiPhotosArray, FetchThunkArg, PhotosArray, PhotoObj, Status } from "../util/helpers/types";
 
 const photosAdapter = createEntityAdapter<PhotoObj>();
 const initAdapterState: InitAdapterState = {
     status: "idle",
     error: "",
-    totalResults: 0,
 };
 
 const initialState = photosAdapter.getInitialState(initAdapterState);
@@ -21,26 +17,36 @@ export const fetchPhotos = createAsyncThunk<
     PhotosArray,
     FetchThunkArg,
     { dispatch: AppDispatch }
->("photos/fetchPhotos", async (obj, { dispatch }) => {
-    const { url } = obj;
-    const data: ApiPhotosArray = await fetchData(url, dispatch, "photosSlice");
-    const dataWithObjUrls: PhotosArray = await createPhotoObjectUrls(data);
+>(
+    "photos/fetchPhotos",
+    async (obj, { dispatch }) => {
+        const { url } = obj;
+        const data: ApiPhotosArray = await fetchData(
+            url,
+            dispatch,
+            "photosSlice"
+        );
+        const dataWithObjUrls: PhotosArray = await createPhotoObjectUrls(data);
 
-    return dataWithObjUrls;
-});
+        return dataWithObjUrls;
+    },
+    {
+        condition: (obj, { getState }) => {
+            const state = getState() as RootState;
+            const photosStatus = state.photos.status;
+            if (photosStatus !== "idle") {
+                return false;
+            }
+        },
+    }
+);
 
 const photosSlice = createSlice({
     name: "photos",
     initialState,
     reducers: {
-        setTotalPhotosResults(state, action: PayloadAction<number>) {
-            state.totalResults = action.payload;
-        },
         resetPhotosStatus(state) {
             state.status = "idle";
-        },
-        resetPhotosAndUsersStatus(state) {
-            state.status = "idle";    
         },
     },
     extraReducers(builder) {
@@ -75,26 +81,37 @@ const photosSlice = createSlice({
                         photosAdapter.addMany(state, data);
                         break;
                 }
-                
+
                 state.status = "succeeded";
-            });
+            })
+            .addCase(incrementPageNum, (state) => {
+                state.status = "idle";
+            })
+
+    },
+    selectors: {
+        selectPhotosStatus: (state): Status => {
+            return state.status;
+        },
     },
 });
 
-export const {
-    selectAll: selectAllPhotos,
-    selectById: selectPhotoById,
-    selectIds: selectPhotosIds,
-} = photosAdapter.getSelectors((state: RootState) => state.photos);
+export const { selectById: selectPhotoById, selectIds: selectPhotosIds } =
+    photosAdapter.getSelectors((state: RootState) => state.photos);
 
-export const selectPhotosStatus = (state: RootState) => {
-    return state.photos.status;
-};
+export const { resetPhotosStatus } = photosSlice.actions;
+export const { selectPhotosStatus } = photosSlice.selectors;
 
-export const {
-    setTotalPhotosResults,
-    resetPhotosStatus,
-    resetPhotosAndUsersStatus
-} = photosSlice.actions;
+export const selectCheckPhotoStatus = (statusType: Status) =>
+    createSelector(selectPhotosStatus, (status) => {
+        return status === statusType;
+    });
+
+export const selectIsNoPhotoResults = createSelector(
+    [selectPhotosStatus, selectPhotosIds],
+    (status, idArr) => {
+        return status === "succeeded" && idArr.length === 0;
+    }
+);
 
 export default photosSlice.reducer;

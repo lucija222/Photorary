@@ -1,11 +1,12 @@
 import "./PhotoGrid.scss";
 import { useEffect, useRef } from "react";
+import Loader from "../../UIComponents/Loader/Loader";
 import { FetchThunkArg } from "../../../util/helpers/types";
-import NoResults from "../../searchComps/NoResults/NoResults";
+import NoResults from "../../UIComponents/NoResults/NoResults";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { fetchPhotos, resetPhotosStatus, selectPhotosIds, selectPhotosStatus } from "../../../store/photosSlice";
-import ResizeObserverComp from "../../gridComps/observers/ResizeObserverComp/ResizeObserverComp";
-import { setMainLoader } from "../../../store/loaderSlice";
+import { selectScrollLoader, turnOffMainLoader, } from "../../../store/loaderSlice";
+import RenderDynamicGridColumns from "../../gridComps/RenderDynamicGridColumns/RenderDynamicGridColumns";
+import { fetchPhotos, resetPhotosStatus, selectCheckPhotoStatus, selectIsNoPhotoResults, }from "../../../store/photosSlice";
 
 interface PhotoGridProps {
     payload: FetchThunkArg;
@@ -13,34 +14,37 @@ interface PhotoGridProps {
 
 const PhotoGrid = ({ payload }: PhotoGridProps) => {
     const dispatch = useAppDispatch();
-    const photoIds = useAppSelector(selectPhotosIds);
-    const photosStatus = useAppSelector((state) => selectPhotosStatus(state));
-    const isDataLoaded = photosStatus === "succeeded";
-    const isNoResults = photoIds.length === 0;
-    const photosGridRef = useRef<HTMLDivElement | null>(null);
+    const isStatusIdle = useAppSelector(selectCheckPhotoStatus("idle"));
+    const isScrollLoader = useAppSelector(selectScrollLoader);
+    const isNoResults = useAppSelector(selectIsNoPhotoResults);
+    const photosGridRef = useRef<HTMLElement | null>(null);
 
     useEffect(() => {
-        if (photosStatus === "idle") {
+        if (isStatusIdle) {
             dispatch(fetchPhotos(payload));
         }
+    }, [dispatch, isStatusIdle, payload]);
 
+    useEffect(() => {
         return () => {
-            if (photosStatus === "failed" || isDataLoaded) {
-                dispatch(resetPhotosStatus());
-            }
+            dispatch(resetPhotosStatus());
         };
-    }, [dispatch, photosStatus, isDataLoaded, payload]);
+    }, [dispatch]);
 
     useEffect(() => {
         if (isNoResults) {
-            dispatch(setMainLoader(false));
+            dispatch(turnOffMainLoader());
         }
     }, [dispatch, isNoResults]);
 
     return (
         <section id="photos-grid" ref={photosGridRef}>
-            {isNoResults && isDataLoaded && <NoResults />}
-            {!isNoResults && isDataLoaded && <ResizeObserverComp gridRef={photosGridRef} isPhotos={true} />}
+            {isNoResults && <NoResults />}
+            <RenderDynamicGridColumns
+                gridRef={photosGridRef}
+                isPhotoGrid={true}
+            />
+            {isScrollLoader && <Loader type="in-grid" />}
         </section>
     );
 };

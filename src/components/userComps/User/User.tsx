@@ -1,42 +1,38 @@
 import "./User.scss";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { selectUserById } from "../../../store/usersSlice";
 import UserSocialLink from "../UserSocialLink/UserSocialLink";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { selectMainLoader, setMainLoader } from "../../../store/loaderSlice";
+import { useAppSelector } from "../../../store/hooks";
+import useTurnOffLoaders from "../../../util/helpers/functions/customHooks/useTurnOffLoaders";
+import useInfiniteScroll from "../../../util/helpers/functions/customHooks/useInfiniteScroll";
 
 interface UserProps {
     id: string;
     isLastElem?: boolean;
+    isObserverElem?: boolean;
 }
 
-const User = ({ id, isLastElem }: UserProps) => {
-    const dispatch = useAppDispatch();
+const User = ({ id, isLastElem, isObserverElem }: UserProps) => {
     const user = useAppSelector((state) => selectUserById(state, id));
     const lastUserRef = useRef<HTMLDivElement | null>(null);
-    const isLoaderOn = useAppSelector((state) => selectMainLoader(state));
+    const observerElemRef = useInfiniteScroll();
+    useTurnOffLoaders(lastUserRef, observerElemRef, false);
 
     const {
-        name, bio, profile_image, instagram_username,
+        name, username, bio, profile_image, instagram_username,
         twitter_username, portfolio_url,
     } = user;
 
-
-    useEffect(() => {
-        if (lastUserRef.current && isLoaderOn) {
-            setTimeout(() => {
-                dispatch(setMainLoader(false));
-            }, 1000)
-        }
-    }, [dispatch, isLoaderOn]);
+    const isSocialLinks: boolean = (instagram_username ? true : false) || (twitter_username ? true : false) || (portfolio_url ? true : false);
 
     return (
         <div className="user-container" ref={isLastElem ? lastUserRef : null}>
-            <img src={profile_image.object_url} alt="User" />
+            <Link to={`/user/${username}`}> <img src={profile_image.object_url} alt="User" /></Link> 
             <div className="user-data">
-                <h2>{name}</h2>
+            <Link to={`/user/${username}`}> <h2>{name}</h2> </Link> 
                 {bio && <p className="bio">{bio}</p>}
-                <div className="social-container">
+               <div className={isSocialLinks ? "social-container" : ""}>
                     {instagram_username && (
                         <UserSocialLink
                             url={`https://www.instagram.com/${instagram_username}`}
@@ -55,6 +51,7 @@ const User = ({ id, isLastElem }: UserProps) => {
                             linkType="portfolio"
                         />
                     )}
+                    {isObserverElem && <div className="observer-div" ref={observerElemRef} ></div>}
                 </div>
             </div>
         </div>

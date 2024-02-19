@@ -1,3 +1,5 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
 .user-container {
     display: inline-flex;
     flex-direction: column;
@@ -9,27 +11,31 @@
     border-radius: 10px;
     padding: 20px 22px;
     max-width: 90vw;
+    color: $dark-font-color;
 
-    img {
+    a img {
         width: 75px;
         border-radius: 50%;
     }
+}
+
+.user-data:has(.bio, .social-container) {
+    row-gap: 8px;
 }
 
 .user-data {
     display: flex;
     flex-direction: column;
     align-items: center;
-    row-gap: 10px;
     max-width: 76%;
-    color: #623131;
     text-align: center;
 
-    h2 {
+    a h2 {
+        color: $dark-font-color;
         font-size: 18px;
     }
 
-    .bio{
+    .bio {
         font-size: 15px;
         text-align: center;
         word-break: break-word;
@@ -43,18 +49,16 @@
         svg {
             height: 25px;
             width: 25px;
-            fill: #623131;
+            fill: $dark-font-color;
         }
     }
 }
 
-
 @media screen and (min-width: 450px) {
     .user-container {
-    flex-direction: row;
-        max-width: 80vw;
+        flex-direction: row;
 
-        img {
+        a img {
             width: 128px;
         }
     }
@@ -62,13 +66,19 @@
     .user-data {
         align-items: flex-start;
 
-        .bio{
+        .bio {
             font-size: 20px;
             text-align: start;
         }
 
-        h2 {
+        a h2 {
             font-size: 22px;
         }
+    }
+}
+
+@media screen and (min-width: 890px) {
+    .user-container {
+        max-width: 80vw;
     }
 }

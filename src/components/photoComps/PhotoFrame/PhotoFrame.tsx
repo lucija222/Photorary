@@ -1,26 +1,30 @@
 import "./PhotoFrame.scss";
 import { Link } from "react-router-dom";
 import { RootState } from "../../../store/store";
-import { MouseEventHandler, useEffect, useRef } from "react";
+import { MouseEventHandler, useRef } from "react";
 import { DownloadSvg } from "../../../assets/svg/exports";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { dowloadAndCleanup } from "../../../util/helpers/functions/triggerDowload";
-import { selectMainLoader, setMainLoader } from "../../../store/loaderSlice";
 import { resetPhotosStatus, selectPhotoById } from "../../../store/photosSlice";
 import { fetchPhotoForDownload } from "../../../util/helpers/functions/fetchPhotoForDownload";
+import useTurnOffLoaders from "../../../util/helpers/functions/customHooks/useTurnOffLoaders";
+import useInfiniteScroll from "../../../util/helpers/functions/customHooks/useInfiniteScroll";
 
 interface PhotoFrameProps {
     id: string;
     isLastElem: boolean;
+    isObserverElem: boolean;
 }
 
-const PhotoFrame = ({ id, isLastElem }: PhotoFrameProps) => {
+const PhotoFrame = ({ id, isLastElem, isObserverElem }: PhotoFrameProps) => {
     const dispatch = useAppDispatch();
-    const isLoaderOn = useAppSelector(selectMainLoader);
     const photo = useAppSelector((state: RootState) =>
         selectPhotoById(state, id)
     );
-    const lastPhotoRef = useRef<HTMLElement | null>(null);
+    const lastPhotoRef = useRef<HTMLDivElement | null>(null);
+    const observerElemRef = useInfiniteScroll();
+    useTurnOffLoaders(lastPhotoRef, observerElemRef, true);
+    const { name, username, profile_image } = photo.user;
 
     const returnPhotoAlt = (): string => {
         const description = photo.description;
@@ -39,9 +43,7 @@ const PhotoFrame = ({ id, isLastElem }: PhotoFrameProps) => {
         e
     ) => {
         e.stopPropagation();
-
         const imgObjectUrl = await fetchPhotoForDownload(photo.urls.full);
-
         if (imgObjectUrl) {
             dowloadAndCleanup(imgObjectUrl, id);
         }
@@ -52,42 +54,36 @@ const PhotoFrame = ({ id, isLastElem }: PhotoFrameProps) => {
         dispatch(resetPhotosStatus());
     };
 
-    useEffect(() => {
-        if (lastPhotoRef.current && isLoaderOn) {
-            setTimeout(() => {
-                dispatch(setMainLoader(false));
-            }, 1000)
-        }
-    }, [dispatch, isLoaderOn]);
-
     return (
-        <article
-            className="frame-container"
-            ref={isLastElem ? lastPhotoRef : null}
-        >
-            <div className="frame">
-                <img
-                    src={photo.urls.small_object_url}
-                    alt={returnPhotoAlt()}
-                    className="photograph"
-                />
-                <address className="author">
-                    <Link
-                        to={`/user/${photo.user.username}`}
-                        onClick={handleAuthorClick}
-                    >
-                        <img
-                            src={photo.user.profile_image.small}
-                            alt="Author"
-                        />
-                        <h2>{photo.user.name}</h2>
-                    </Link>
-                    <button type="button" onClick={handlePhotoDownload}>
-                        <DownloadSvg />
-                    </button>
-                </address>
-            </div>
-        </article>
+        <>
+            <article className="frame-container">
+                <div className="frame" ref={isLastElem ? lastPhotoRef : null}>
+                    <img
+                        src={photo.urls.small_object_url}
+                        alt={returnPhotoAlt()}
+                        className="photograph"
+                    />
+                    <address className="author">
+                        <Link
+                            to={`/user/${username}`}
+                            onClick={handleAuthorClick}
+                        >
+                            <img src={profile_image.small} alt="Author" />
+                            <h2>{name}</h2>
+                        </Link>
+                        {isObserverElem && (
+                            <div
+                                className="observer-div"
+                                ref={observerElemRef}
+                            ></div>
+                        )}
+                        <button type="button" onClick={handlePhotoDownload}>
+                            <DownloadSvg />
+                        </button>
+                    </address>
+                </div>
+            </article>
+        </>
     );
 };
 
