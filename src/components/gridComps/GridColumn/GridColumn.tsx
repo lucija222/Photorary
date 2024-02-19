@@ -5,23 +5,32 @@ import User from "../../userComps/User/User";
 interface GridColumnProps {
     idsArray: string[];
     lastId: string;
-    isPhotos: boolean;
+    idForObserver: string;
+    isPhotoGrid: boolean;
 }
 
-const GridColumn = ({ idsArray, lastId, isPhotos }: GridColumnProps) => {
+const GridColumn = ({
+    idsArray,
+    lastId,
+    idForObserver,
+    isPhotoGrid,
+}: GridColumnProps) => {
+
     const renderElements = () => {
         return idsArray.map((id) => {
             const isLastElem = lastId === id;
+            const isObserverElem = idForObserver === id;
+            const Component = isPhotoGrid ? PhotoFrame : User;
 
-            return isPhotos ? (
-                <PhotoFrame key={id} id={id} isLastElem={isLastElem} />
-            ) : (
-                <User key={id} id={id} isLastElem={isLastElem} />
-            );
+            return <Component key={id} id={id} isLastElem={isLastElem} isObserverElem={isObserverElem} />
         });
     };
 
-    return <div className={isPhotos ? "photo-grid-column" : "user-grid-column"}>{renderElements()}</div>;
+    return (
+        <div className={isPhotoGrid ? "photo-grid-column" : "user-grid-column"}>
+            {renderElements()}
+        </div>
+    );
 };
 
 export default GridColumn;

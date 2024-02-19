@@ -1,7 +1,6 @@
 import { AppDispatch } from "../../../store/store";
-import { setTotalPhotosResults } from "../../../store/photosSlice";
-import { setTotalUsersResults } from "../../../store/usersSlice";
 import { authHeader } from "../constants";
+import { setTotalPages } from "../../../store/urlSlice";
 
 export const fetchData = async (
     url: string,
@@ -11,23 +10,19 @@ export const fetchData = async (
     const response = await fetch(url, authHeader);    
     const data = await response.json();
     const isPhotosSlice = slice === "photosSlice";
+    console.log(response);
+    
 
-    const handleResultsTotal = (payload: number) => {
-        return isPhotosSlice
-            ? setTotalPhotosResults(payload)
-            : setTotalUsersResults(payload);
-    };
-
-    if (url.includes("/search/")) { //Set num of search results
-        dispatch(handleResultsTotal(data.total));
+    if (url.includes("/search/")) { //Set for search results
+        dispatch(setTotalPages(data.total));
         return data.results;
 
-    } else if (!isPhotosSlice) { //Set num of photos for a profile
-        dispatch(setTotalPhotosResults(data.total_photos));
+    } else if (!isPhotosSlice) { //Set for profile
+        dispatch(setTotalPages(data.total_photos));
 
-    } else { //For feed
-        dispatch(handleResultsTotal(1000));
-    }
+    } else if (!(url.includes("/users/") && url.includes("/photos?"))) { //Set for feed
+        dispatch(setTotalPages(900));
+    } 
 
     return data;
 };

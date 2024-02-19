@@ -1,10 +1,8 @@
 import "./App.scss";
-import { RouterProvider, createBrowserRouter, } from "react-router-dom";
-import { Root, Feed, Profile, About } from "./pages/exports";
-import SearchPhotos from "./components/searchComps/SearchPhotos";
-import SearchUsers from "./components/searchComps/SearchUsers";
-import SearchToggler from "./components/searchComps/SearchToggler/SearchToggler";
 import Error from "./components/UIComponents/Error/Error";
+import { RouterProvider, createBrowserRouter, } from "react-router-dom";
+import { Root, Feed, Profile, About, SearchPhotos, SearchUsers } from "./pages/exports";
+import SearchToggler from "./components/headerComps/SearchToggler/SearchToggler";
 
 const App = () => {
 
@@ -28,7 +26,7 @@ const App = () => {
                 },
                 {
                     path: "search",
-                    element: <SearchToggler/>,
+                    element: <SearchToggler />,
                     children: [
                         { 
                             path: "photos", 

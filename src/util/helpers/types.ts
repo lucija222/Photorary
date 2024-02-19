@@ -1,3 +1,5 @@
+import { MutableRefObject } from "react";
+
 //--------------------------------------------------------------SLICES
 export type Status = "idle" | "loading" | "succeeded" | "failed";
 export interface FetchThunkArg {
@@ -8,7 +10,6 @@ export interface FetchThunkArg {
 export interface InitAdapterState {
     status: Status;
     error: string;
-    totalResults: number;
 }
 
 //--------------------------------------------------------API RESPONSE TYPES
@@ -64,3 +65,6 @@ export type ApiPhotosArray = ApiPhotoObj[];
 export type PhotosArray = PhotoObj[];
 export type ApiUsersArray = ApiUserObj[];
 export type UsersArray = UserObj[];
+
+export type DivRef = MutableRefObject<HTMLDivElement | null>;
+export type ObserverElemRef = DivRef | undefined;

@@ -1,45 +1,51 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "./store";
-import { resetPhotosAndUsersStatus, resetPhotosStatus } from "./photosSlice";
+import { createSlice, isAnyOf } from "@reduxjs/toolkit";
+import { resetPhotosStatus } from "./photosSlice";
 import { resetUsersStatus } from "./usersSlice";
+import { incrementPageNum } from "./urlSlice";
 
 const initialState = {
     mainLoader: true,
-    scrollLoader: false
+    scrollLoader: false,
 };
 
 export const loaderSlice = createSlice({
     name: "loader",
     initialState,
     reducers: {
-        setMainLoader(state, action) {       
-            state.mainLoader = action.payload;
+        turnOffMainLoader(state) {
+            if (state.mainLoader === true) {
+                state.mainLoader = false;
+            }
         },
-        setScrollLoader(state, action) {
-            state.scrollLoader = action.payload;
-        }
+        turnOffScrollLoader(state) {
+            state.scrollLoader = false;
+        },
     },
     extraReducers(builder) {
-        builder 
-            .addCase(resetPhotosStatus, (state) => {
-                state.mainLoader = true;
+        builder
+            .addCase(incrementPageNum, (state) => {
+                state.scrollLoader = true;
             })
-            .addCase(resetUsersStatus, (state) => {
-                state.mainLoader = true;
-            })
-            .addCase(resetPhotosAndUsersStatus, (state) => {
-                state.mainLoader = true;
-            })
+            .addMatcher(
+                isAnyOf(resetPhotosStatus, resetUsersStatus),
+                (state) => {
+                    if (state.mainLoader === false) {
+                        state.mainLoader = true;
+                    }
+                }
+            );
+    },
+    selectors: {
+        selectMainLoader: (state): boolean => {
+            return state.mainLoader;
+        },
+        selectScrollLoader: (state): boolean => {
+            return state.scrollLoader;
+        }
     }
 });
 
-export const { setMainLoader, setScrollLoader } = loaderSlice.actions;
-
-export const selectMainLoader = (state: RootState) => {
-    return state.loader.mainLoader;
-}
-export const selectScrollLoader = (state: RootState) => {
-    return state.loader.scrollLoader;
-}
+export const { turnOffMainLoader, turnOffScrollLoader } = loaderSlice.actions;
+export const { selectMainLoader, selectScrollLoader } = loaderSlice.selectors;
 
 export default loaderSlice.reducer;

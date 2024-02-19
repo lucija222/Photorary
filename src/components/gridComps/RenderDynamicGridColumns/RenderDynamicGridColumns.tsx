@@ -2,41 +2,47 @@ import { useAppSelector } from "../../../store/hooks";
 import { selectPhotosIds } from "../../../store/photosSlice";
 import GridColumn from "../GridColumn/GridColumn";
 import { selectUsersIds } from "../../../store/usersSlice";
+import { MutableRefObject } from "react";
+import useCalcGridColsNum from "../../../util/helpers/functions/customHooks/useCalcGridColsNum";
 
 interface RenderDynamicGridColumnsProps {
-    gridColumnCount: number;
-    isPhotos: boolean;
+    gridRef: MutableRefObject<HTMLElement | null>;
+    isPhotoGrid: boolean;
 }
 
 const RenderDynamicGridColumns = ({
-    gridColumnCount,
-    isPhotos,
+    gridRef,
+    isPhotoGrid
 }: RenderDynamicGridColumnsProps) => {
 
-    const idArray = useAppSelector(isPhotos ? selectPhotosIds : selectUsersIds);
+    const columnCount = useCalcGridColsNum(gridRef, isPhotoGrid);
+
+    const idArray = useAppSelector(isPhotoGrid ? selectPhotosIds : selectUsersIds);
     const lastId = idArray[idArray.length - 1];
+    const idForObserver = idArray[idArray.length - 15];
 
     const idArraysPerColumn: string[][] = Array.from(
-        { length: gridColumnCount },
+        { length: columnCount },
         () => []
     );
 
     idArray.forEach((photoId, index) => {
-        const columnIndex = index % gridColumnCount;
+        const columnIndex = index % columnCount;
         idArraysPerColumn[columnIndex].push(photoId);
     });
 
     const renderGridColumns = () => {
         const gridColumnsArray: JSX.Element[] = [];
 
-        for (let i = 0; i < gridColumnCount; i++) {
+        for (let i = 0; i < columnCount; i++) {
             const photoIdsArray = idArraysPerColumn[i];
             gridColumnsArray.push(
                 <GridColumn
                     key={`grid-column-${i}`}
                     idsArray={photoIdsArray}
                     lastId={lastId}
-                    isPhotos={isPhotos}
+                    idForObserver={idForObserver}
+                    isPhotoGrid={isPhotoGrid}
                 />
             );
         }

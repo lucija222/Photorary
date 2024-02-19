@@ -3,11 +3,14 @@ import { FormEventHandler, useRef, useState } from "react";
 import { useAppDispatch } from "../../../store/hooks";
 import { setQuery } from "../../../store/urlSlice";
 import { useLocation, useNavigate } from "react-router-dom";
+import { resetUsersStatus } from "../../../store/usersSlice";
+import { resetPhotosStatus } from "../../../store/photosSlice";
 
 const SearchBar = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const isUsersRoute = location.pathname === "/search/users";     
+    const pathname = location.pathname;
+    const isUsersRoute = pathname === "/search/users";     
     const dispatch = useAppDispatch();
     const [input, setInput] = useState("");
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -18,7 +21,12 @@ const SearchBar = () => {
         const encodedInput = encodeURIComponent(input);
         dispatch(setQuery(encodedInput));
         setInput("");
-        navigate(isUsersRoute ? "/search/users" : "/search/photos");
+        dispatch(isUsersRoute ? resetUsersStatus() : resetPhotosStatus());
+        if (!pathname.includes("/search/")) {
+            navigate("/search/photos");
+        } else {
+            window.scrollTo(0, 0);
+        }
         inputRef.current?.blur();
     };
 

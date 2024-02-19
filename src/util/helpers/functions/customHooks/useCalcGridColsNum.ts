@@ -1,12 +1,8 @@
 import { MutableRefObject, useEffect, useState } from "react";
-import RenderDynamicGridColumns from "../../RenderDynamicGridColumns/RenderDynamicGridColumns";
 
-interface ResizeObserverCompProps {
-    gridRef: MutableRefObject<HTMLDivElement | null>;
-    isPhotos: boolean;
-}
+type GridRef = MutableRefObject<HTMLElement | null>;
 
-const ResizeObserverComp = ({ gridRef, isPhotos }: ResizeObserverCompProps) => {
+const useCalcGridColsNum = (gridRef: GridRef, isPhotoGrid: boolean) => {
     const [gridColumnCount, setGridColumnCount] = useState<number>(1);
 
     useEffect(() => {
@@ -14,7 +10,7 @@ const ResizeObserverComp = ({ gridRef, isPhotos }: ResizeObserverCompProps) => {
 
         const resizeObserver = new ResizeObserver(
             (entries: ResizeObserverEntry[]) => {
-                const minColumnWidth =  isPhotos ? 355 : 325;
+                const minColumnWidth =  isPhotoGrid ? 355 : 325;
 
                 for (let entry of entries) {
                     const gridWidth = entry.borderBoxSize[0].inlineSize;
@@ -40,14 +36,9 @@ const ResizeObserverComp = ({ gridRef, isPhotos }: ResizeObserverCompProps) => {
         return () => {
             resizeObserver.disconnect();
         };
-    });
+    }, [gridRef, isPhotoGrid]);
 
-    return (
-        <RenderDynamicGridColumns
-            gridColumnCount={gridColumnCount}
-            isPhotos={isPhotos}
-        />
-    );
+    return gridColumnCount;
 };
 
-export default ResizeObserverComp;
+export default useCalcGridColsNum;
