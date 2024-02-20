@@ -6,6 +6,7 @@ import UserSocialLink from "../UserSocialLink/UserSocialLink";
 import { useAppSelector } from "../../../store/hooks";
 import useTurnOffLoaders from "../../../util/helpers/functions/customHooks/useTurnOffLoaders";
 import useInfiniteScroll from "../../../util/helpers/functions/customHooks/useInfiniteScroll";
+import useHandleTooFastScroll from "../../../util/helpers/functions/customHooks/useHandleTooFastScroll";
 
 interface UserProps {
     id: string;
@@ -17,6 +18,7 @@ const User = ({ id, isLastElem, isObserverElem }: UserProps) => {
     const user = useAppSelector((state) => selectUserById(state, id));
     const lastUserRef = useRef<HTMLDivElement | null>(null);
     const observerElemRef = useInfiniteScroll();
+    useHandleTooFastScroll(lastUserRef);
     useTurnOffLoaders(lastUserRef, observerElemRef, false);
 
     const {

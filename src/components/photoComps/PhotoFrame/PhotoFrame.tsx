@@ -9,6 +9,7 @@ import { resetPhotosStatus, selectPhotoById } from "../../../store/photosSlice";
 import { fetchPhotoForDownload } from "../../../util/helpers/functions/fetchPhotoForDownload";
 import useTurnOffLoaders from "../../../util/helpers/functions/customHooks/useTurnOffLoaders";
 import useInfiniteScroll from "../../../util/helpers/functions/customHooks/useInfiniteScroll";
+import useHandleTooFastScroll from "../../../util/helpers/functions/customHooks/useHandleTooFastScroll";
 
 interface PhotoFrameProps {
     id: string;
@@ -24,6 +25,7 @@ const PhotoFrame = ({ id, isLastElem, isObserverElem }: PhotoFrameProps) => {
     const lastPhotoRef = useRef<HTMLDivElement | null>(null);
     const observerElemRef = useInfiniteScroll();
     useTurnOffLoaders(lastPhotoRef, observerElemRef, true);
+    useHandleTooFastScroll(lastPhotoRef);
     const { name, username, profile_image } = photo.user;
 
     const returnPhotoAlt = (): string => {
