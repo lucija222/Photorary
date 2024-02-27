@@ -14,16 +14,14 @@ header {
     align-items: center;
     border-bottom: 15px solid $main-background;
 
-    h1 a {
+    h1 button {
         display: flex;
         align-items: center;
         column-gap: 7px;
-        font-style: italic;
         color: #f5e8df;
 
         span {
-            font-size: 23px;
-            font-weight: 400;
+            @include font-size-style-weight(23px, italic, 400);
             display: none;
         }
     }
@@ -39,7 +37,7 @@ header {
     header {
         column-gap: 30px;
 
-        h1 a span {
+        h1 button span {
             display: inline;
         }
     }

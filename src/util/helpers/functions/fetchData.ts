@@ -10,8 +10,6 @@ export const fetchData = async (
     const response = await fetch(url, authHeader);    
     const data = await response.json();
     const isPhotosSlice = slice === "photosSlice";
-    console.log(response);
-    
 
     if (url.includes("/search/")) { //Set for search results
         dispatch(setTotalPages(data.total));
