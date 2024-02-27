@@ -20,11 +20,16 @@ const UsersGrid = () => {
     }, [dispatch, isNoResults]);
 
     return (
-        <section id="users-grid" ref={usersGridRef}>
-            {isNoResults && <NoResults />}
-            <RenderDynamicGridColumns gridRef={usersGridRef} isPhotoGrid={false} />
-            {isScrollLoader && <Loader type="in-grid"/>}
-        </section>
+        <>
+            <section id="users-grid" ref={usersGridRef}>
+                {isNoResults && <NoResults />}
+                <RenderDynamicGridColumns
+                    gridRef={usersGridRef}
+                    isPhotoGrid={false}
+                />
+            </section>
+            {isScrollLoader && <Loader type="in-grid" />}
+        </>
     );
 };
 

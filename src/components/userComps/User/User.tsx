@@ -29,9 +29,9 @@ const User = ({ id, isLastElem, isObserverElem }: UserProps) => {
     const isSocialLinks: boolean = (instagram_username ? true : false) || (twitter_username ? true : false) || (portfolio_url ? true : false);
 
     return (
-        <div className="user-container" ref={isLastElem ? lastUserRef : null}>
+        <article className="user-container" ref={isObserverElem ? observerElemRef : null}>
             <Link to={`/user/${username}`}> <img src={profile_image.object_url} alt="User" /></Link> 
-            <div className="user-data">
+            <div className="user-data" ref={isLastElem ? lastUserRef : null}>
             <Link to={`/user/${username}`}> <h2>{name}</h2> </Link> 
                 {bio && <p className="bio">{bio}</p>}
                <div className={isSocialLinks ? "social-container" : ""}>
@@ -53,10 +53,9 @@ const User = ({ id, isLastElem, isObserverElem }: UserProps) => {
                             linkType="portfolio"
                         />
                     )}
-                    {isObserverElem && <div className="observer-div" ref={observerElemRef} ></div>}
                 </div>
             </div>
-        </div>
+        </article>
     );
 };
 
