@@ -18,6 +18,12 @@ $main-background: #e1d5cd;
     height: $h;
 }
 
+@mixin font-size-style-weight ($size, $style, $weight) {
+    font-size: $size;
+    font-style: $style;
+    font-weight: $weight;
+}
+
 %flex-column {
     display: flex;
     flex-direction: column;
