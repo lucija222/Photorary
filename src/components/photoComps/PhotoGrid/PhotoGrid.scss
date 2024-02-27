@@ -4,8 +4,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--col-min-width), 1fr));
     column-gap: 25px;
-    row-gap: 70px;
-    padding-bottom: 20vh;
 }
 
 .user-container + #photos-grid, #search-links-wrapper + #photos-grid {

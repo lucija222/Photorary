@@ -58,7 +58,7 @@ const PhotoFrame = ({ id, isLastElem, isObserverElem }: PhotoFrameProps) => {
 
     return (
         <>
-            <article className="frame-container">
+            <article className="frame-container" ref={isObserverElem ? observerElemRef : null}>
                 <div className="frame" ref={isLastElem ? lastPhotoRef : null}>
                     <img
                         src={photo.urls.small_object_url}
@@ -73,12 +73,6 @@ const PhotoFrame = ({ id, isLastElem, isObserverElem }: PhotoFrameProps) => {
                             <img src={profile_image.small} alt="Author" />
                             <h2>{name}</h2>
                         </Link>
-                        {isObserverElem && (
-                            <div
-                                className="observer-div"
-                                ref={observerElemRef}
-                            ></div>
-                        )}
                         <button type="button" onClick={handlePhotoDownload}>
                             <DownloadSvg />
                         </button>

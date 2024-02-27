@@ -38,14 +38,16 @@ const PhotoGrid = ({ payload }: PhotoGridProps) => {
     }, [dispatch, isNoResults]);
 
     return (
-        <section id="photos-grid" ref={photosGridRef}>
+        <>
+           <section id="photos-grid" ref={photosGridRef}>
             {isNoResults && <NoResults />}
             <RenderDynamicGridColumns
                 gridRef={photosGridRef}
                 isPhotoGrid={true}
             />
-            {isScrollLoader && <Loader type="in-grid" />}
         </section>
+        {isScrollLoader && <Loader type="in-grid" />}
+        </>
     );
 };
 
