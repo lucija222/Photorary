@@ -1,9 +1,10 @@
-import { AppDispatch, RootState } from "./store";
+import { RootState } from "./store";
 import { incrementPageNum } from "./urlSlice";
-import { fetchData } from "../util/helpers/functions/fetchData";
-import { createPhotoObjectUrls } from "../util/helpers/functions/createPhotoObjectUrls";
-import { createAsyncThunk, createEntityAdapter, createSelector, createSlice, } from "@reduxjs/toolkit";
-import { InitAdapterState, ApiPhotosArray, FetchThunkArg, PhotosArray, PhotoObj, Status } from "../util/helpers/types";
+import { resetFullscreenPhoto } from "./fullscreenPhotoSlice";
+import { InitAdapterState, PhotoObj, Status } from "../util/helpers/types";
+import { createEntityAdapter, createSelector, createSlice, } from "@reduxjs/toolkit";
+import { fetchPhotos } from "./asyncThunks/fetchPhotos";
+import { fetchFullscreenPhoto } from "./asyncThunks/fetchFullscreenPhoto";
 
 const photosAdapter = createEntityAdapter<PhotoObj>();
 const initAdapterState: InitAdapterState = {
@@ -12,34 +13,6 @@ const initAdapterState: InitAdapterState = {
 };
 
 const initialState = photosAdapter.getInitialState(initAdapterState);
-
-export const fetchPhotos = createAsyncThunk<
-    PhotosArray,
-    FetchThunkArg,
-    { dispatch: AppDispatch }
->(
-    "photos/fetchPhotos",
-    async (obj, { dispatch }) => {
-        const { url } = obj;
-        const data: ApiPhotosArray = await fetchData(
-            url,
-            dispatch,
-            "photosSlice"
-        );
-        const dataWithObjUrls: PhotosArray = await createPhotoObjectUrls(data);
-
-        return dataWithObjUrls;
-    },
-    {
-        condition: (obj, { getState }) => {
-            const state = getState() as RootState;
-            const photosStatus = state.photos.status;
-            if (photosStatus !== "idle") {
-                return false;
-            }
-        },
-    }
-);
 
 const photosSlice = createSlice({
     name: "photos",
@@ -87,7 +60,19 @@ const photosSlice = createSlice({
             .addCase(incrementPageNum, (state) => {
                 state.status = "idle";
             })
-
+            .addCase(fetchFullscreenPhoto.fulfilled, (state, action) => {
+                const id = action.meta.arg.id;
+                const regularObjUrl = action.payload;
+                const entity = state.entities[id];
+                if (entity) {
+                    entity.urls.regular_object_url = regularObjUrl;
+                }
+            })
+            .addCase(resetFullscreenPhoto, (state, action) => {
+                const entity = state.entities[action.payload];
+                URL.revokeObjectURL(entity.urls.regular_object_url);
+                entity.urls.regular_object_url = "";
+            })
     },
     selectors: {
         selectPhotosStatus: (state): Status => {

@@ -3,10 +3,12 @@ import { useEffect, useRef } from "react";
 import Loader from "../../UIComponents/Loader/Loader";
 import { FetchThunkArg } from "../../../util/helpers/types";
 import NoResults from "../../UIComponents/NoResults/NoResults";
+import FullscreenPhoto from "../FullscreenPhoto/FullscreenPhoto";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { selectScrollLoader, turnOffMainLoader, } from "../../../store/loaderSlice";
 import RenderDynamicGridColumns from "../../gridComps/RenderDynamicGridColumns/RenderDynamicGridColumns";
-import { fetchPhotos, resetPhotosStatus, selectCheckPhotoStatus, selectIsNoPhotoResults, }from "../../../store/photosSlice";
+import { resetPhotosStatus, selectCheckPhotoStatus, selectIsNoPhotoResults, }from "../../../store/photosSlice";
+import { fetchPhotos } from "../../../store/asyncThunks/fetchPhotos";
 
 interface PhotoGridProps {
     payload: FetchThunkArg;
@@ -47,6 +49,7 @@ const PhotoGrid = ({ payload }: PhotoGridProps) => {
             />
         </section>
         {isScrollLoader && <Loader type="in-grid" />}
+        <FullscreenPhoto />
         </>
     );
 };

@@ -6,6 +6,7 @@ import UserSocialLink from "../UserSocialLink/UserSocialLink";
 import { useAppSelector } from "../../../store/hooks";
 import useTurnOffLoaders from "../../../util/helpers/functions/customHooks/useTurnOffLoaders";
 import useInfiniteScroll from "../../../util/helpers/functions/customHooks/useInfiniteScroll";
+import { updateArticleRefs } from "../../../util/helpers/functions/updateArticleRefs";
 import useHandleTooFastScroll from "../../../util/helpers/functions/customHooks/useHandleTooFastScroll";
 
 interface UserProps {
@@ -16,7 +17,7 @@ interface UserProps {
 
 const User = ({ id, isLastElem, isObserverElem }: UserProps) => {
     const user = useAppSelector((state) => selectUserById(state, id));
-    const lastUserRef = useRef<HTMLDivElement | null>(null);
+    const lastUserRef = useRef<HTMLElement | null>(null);
     const observerElemRef = useInfiniteScroll();
     useHandleTooFastScroll(lastUserRef);
     useTurnOffLoaders(lastUserRef, observerElemRef, false);
@@ -28,10 +29,21 @@ const User = ({ id, isLastElem, isObserverElem }: UserProps) => {
 
     const isSocialLinks: boolean = (instagram_username ? true : false) || (twitter_username ? true : false) || (portfolio_url ? true : false);
 
+    const handleRefUpdates = (node: HTMLElement | null) => {
+        const refObjArr = [{
+            shouldAttachRef: isLastElem,
+            elemRef: lastUserRef, 
+        }, {
+            shouldAttachRef: isObserverElem,
+            elemRef: observerElemRef, 
+        }];
+        updateArticleRefs(refObjArr, node);
+    }
+
     return (
-        <article className="user-container" ref={isObserverElem ? observerElemRef : null}>
+        <article className="user-container" ref={(node) => {handleRefUpdates(node)}}>
             <Link to={`/user/${username}`}> <img src={profile_image.object_url} alt="User" /></Link> 
-            <div className="user-data" ref={isLastElem ? lastUserRef : null}>
+            <div className="user-data">
             <Link to={`/user/${username}`}> <h2>{name}</h2> </Link> 
                 {bio && <p className="bio">{bio}</p>}
                <div className={isSocialLinks ? "social-container" : ""}>

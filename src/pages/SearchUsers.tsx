@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { useBeforeUnload } from "react-router-dom";
 import UsersGrid from "../components/userComps/UsersGrid/UsersGrid";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchUsers, resetUsersStatus, selectUsersStatus, } from "../store/usersSlice";
+import { resetUsersStatus, selectUsersStatus, } from "../store/usersSlice";
 import { selectActionType, selectPageNum, selectQuery, setQuery, } from "../store/urlSlice";
+import { fetchUsers } from "../store/asyncThunks/fetchUsers";
 
 const SearchUsers = () => {
     const dispatch = useAppDispatch();

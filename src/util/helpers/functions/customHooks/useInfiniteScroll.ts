@@ -5,7 +5,7 @@ import { incrementPageNum, selectIsMaxPages } from "../../../../store/urlSlice";
 const useInfiniteScroll = () => {
     const dispatch = useAppDispatch();
     const isMaxPages = useAppSelector(selectIsMaxPages);
-    const observerElemRef = useRef<HTMLDivElement | null>(null);
+    const observerElemRef = useRef<HTMLElement | null>(null);
 
     useEffect(() => {
         const observerElem = observerElemRef.current;
@@ -15,7 +15,7 @@ const useInfiniteScroll = () => {
                 if (entry.isIntersecting) {
                     dispatch(incrementPageNum());
                 }
-            }
+            }, {threshold: 1.0}
         );
 
         if (observerElem && !isMaxPages) {

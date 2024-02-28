@@ -3,13 +3,15 @@ import photosReducer from "./photosSlice";
 import usersReducer from "./usersSlice";
 import loaderReducer from "./loaderSlice";
 import urlReducer from "./urlSlice";
+import fullscreenPhotoReducer from "./fullscreenPhotoSlice";
 
 const store = configureStore({
     reducer: {
         photos: photosReducer,
         users: usersReducer,
         loader: loaderReducer,
-        url: urlReducer
+        url: urlReducer,
+        fullscreenPhoto: fullscreenPhotoReducer,
     },
 });
 

@@ -4,7 +4,8 @@ import User from "../components/userComps/User/User";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { selectActionType, selectPageNum } from "../store/urlSlice";
 import PhotoGrid from "../components/photoComps/PhotoGrid/PhotoGrid";
-import { fetchUsers, resetUsersStatus, selectCheckUsersStatus, selectUserForProfile, } from "../store/usersSlice";
+import { resetUsersStatus, selectCheckUsersStatus, selectUserForProfile, } from "../store/usersSlice";
+import { fetchUsers } from "../store/asyncThunks/fetchUsers";
 
 const Profile = () => {
     const { username } = useParams();

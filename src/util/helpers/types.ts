@@ -22,8 +22,7 @@ interface UserProfileImage {
 export interface ApiPhotoObj {
     id: string;
     created_at: string;
-    alt_description?: string | null;
-    description?: string | null;
+    description: string | null;
     urls:  {
         full: string;
         regular: string;
@@ -40,6 +39,7 @@ export interface ApiPhotoObj {
 export interface PhotoObj extends ApiPhotoObj {
     urls: ApiPhotoObj["urls"] & {
         small_object_url: string;
+        regular_object_url: string;
     }
 }
 export interface ApiUserObj {
@@ -66,6 +66,5 @@ export type PhotosArray = PhotoObj[];
 export type ApiUsersArray = ApiUserObj[];
 export type UsersArray = UserObj[];
 
-export type DivRef = MutableRefObject<HTMLDivElement | null>;
-export type ObserverElemRef = MutableRefObject<HTMLElement | null> | undefined;
-// export type ObserverElemRef = DivRef | undefined;
+export type ArticleRef = MutableRefObject<HTMLElement | null>;
+export type ObserverElemRef = ArticleRef | undefined;
