@@ -66,6 +66,5 @@ export type PhotosArray = PhotoObj[];
 export type ApiUsersArray = ApiUserObj[];
 export type UsersArray = UserObj[];
 
-export type DivRef = MutableRefObject<HTMLDivElement | null>;
-export type ObserverElemRef = MutableRefObject<HTMLElement | null> | undefined;
-// export type ObserverElemRef = DivRef | undefined;
+export type ArticleRef = MutableRefObject<HTMLElement | null>;
+export type ObserverElemRef = ArticleRef | undefined;

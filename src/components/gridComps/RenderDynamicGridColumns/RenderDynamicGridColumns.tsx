@@ -20,7 +20,7 @@ const RenderDynamicGridColumns = ({
     const idArray = useAppSelector(isPhotoGrid ? selectPhotosIds : selectUsersIds);
     const lastId = idArray[idArray.length - 1];
     const idForObserver = idArray[idArray.length - 15];
-
+    
     const idArraysPerColumn: string[][] = Array.from(
         { length: columnCount },
         () => []

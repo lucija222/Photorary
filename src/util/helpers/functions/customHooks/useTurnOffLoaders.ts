@@ -1,15 +1,16 @@
 import { useEffect } from "react";
-import { DivRef, ObserverElemRef } from "../../types";
+import { ArticleRef, ObserverElemRef } from "../../types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { selectCheckPhotoStatus } from "../../../../store/photosSlice";
 import { selectCheckUsersStatus } from "../../../../store/usersSlice";
 import { selectMainLoader, selectScrollLoader, turnOffMainLoader, turnOffScrollLoader } from "../../../../store/loaderSlice";
 
 const useTurnOffLoaders = (
-    lastElemRef: DivRef,
+    lastElemRef: ArticleRef,
     observerElemRef: ObserverElemRef,
     isPhotoGrid: boolean
 ) => {
+    
     const dispatch = useAppDispatch();
     const isMainLoader = useAppSelector(selectMainLoader);
     const isScrolLoader = useAppSelector(selectScrollLoader);

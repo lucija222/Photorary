@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { DivRef } from "../../types";
+import { ArticleRef } from "../../types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { incrementPageNum, selectIsMaxPages } from "../../../../store/urlSlice";
 import { selectScrollLoader } from "../../../../store/loaderSlice";
 
-const useHandleTooFastScroll = (elemRef: DivRef) => {
+const useHandleTooFastScroll = (elemRef: ArticleRef) => {
     const dispatch = useAppDispatch();
     const isMaxPages = useAppSelector(selectIsMaxPages);
     const isScrollLoader = useAppSelector(selectScrollLoader);
