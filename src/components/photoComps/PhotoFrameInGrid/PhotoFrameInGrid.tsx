@@ -41,7 +41,7 @@ const PhotoFrameInGrid = ({ id, isLastElem, isObserverElem }: PhotoFrameInGridPr
             }}
         >
             <div className="frame">
-                <Photo id={id} />
+                <Photo id={id} isInGrid={true} />
             </div>
         </article>
     );

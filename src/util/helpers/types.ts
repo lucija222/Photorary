@@ -22,8 +22,7 @@ interface UserProfileImage {
 export interface ApiPhotoObj {
     id: string;
     created_at: string;
-    alt_description?: string | null;
-    description?: string | null;
+    description: string | null;
     urls:  {
         full: string;
         regular: string;

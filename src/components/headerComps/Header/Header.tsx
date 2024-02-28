@@ -15,7 +15,7 @@ const Header = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    const handleMenuToggle: MouseEventHandler<HTMLElement> = (e) => {
+    const handleMenuToggle: MouseEventHandler<HTMLButtonElement> = (e) => {
         e.stopPropagation();
         setIsMenuOpen(!isMenuOpen);
     };
