@@ -11,6 +11,7 @@
     z-index: 10;
 
     #x-svg {
+        @include width-height(20px, 20px);
         position: absolute;
         top: 20px;
         right: 30px;

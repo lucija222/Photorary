@@ -5,10 +5,10 @@ import { RootState } from "../../../store/store";
 import { DownloadSvg } from "../../../assets/svg/exports";
 import { photoAlt } from "../../../util/helpers/functions/photoAlt";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setFullscreenPhoto } from "../../../store/fullscreenPhotoSlice";
 import { resetPhotosStatus, selectPhotoById } from "../../../store/photosSlice";
 import { dowloadAndCleanup } from "../../../util/helpers/functions/triggerDowload";
 import { fetchPhotoForDownload } from "../../../util/helpers/functions/fetchPhotoForDownload";
+import { fetchFullscreenPhoto } from "../../../store/asyncThunks/fetchFullscreenPhoto";
 
 interface PhotoProps {
     id: string;
@@ -22,12 +22,12 @@ const Photo = ({ id, isInGrid }: PhotoProps) => {
     );
 
     const { name, username, profile_image } = photo.user;
-    const { regular, small_object_url } = photo.urls;
+    const { small_object_url, regular, regular_object_url, full } = photo.urls;    
     const { description } = photo;
 
     const handlePhotoDownload: MouseEventHandler<HTMLButtonElement> = async (e) => {
         e.stopPropagation();
-        const imgObjectUrl = await fetchPhotoForDownload(photo.urls.full);
+        const imgObjectUrl = await fetchPhotoForDownload(full);
         if (imgObjectUrl) {
             dowloadAndCleanup(imgObjectUrl, id);
         }
@@ -38,17 +38,17 @@ const Photo = ({ id, isInGrid }: PhotoProps) => {
         dispatch(resetPhotosStatus());
     };
 
-    const handlePhotoClick: MouseEventHandler<HTMLImageElement> = (e) => {
+    const handlePhotoClick: MouseEventHandler<HTMLImageElement> = async (e) => {
         e.stopPropagation();
         if (isInGrid) {
-            dispatch(setFullscreenPhoto(id));
+            dispatch(fetchFullscreenPhoto({id: id, url: regular}));
         }
     };
 
     return (
         <>
             <img
-                src={isInGrid ? small_object_url : regular}
+                src={isInGrid ? small_object_url : regular_object_url}
                 alt={photoAlt(description, name)}
                 className={isInGrid ? "photograph" : "photograph disable-click"}
                 onClick={handlePhotoClick}

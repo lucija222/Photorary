@@ -1,15 +1,16 @@
 import  "./PhotoFrame.scss";
 import Photo from "../Photo/Photo";
-import { useAppSelector } from "../../../store/hooks";
-import { selectFullscreenPhotoId } from "../../../store/fullscreenPhotoSlice";
 
-const PhotoFrame = () => {
-    const photoId = useAppSelector(selectFullscreenPhotoId);
+interface PhotoFrameProps {
+    id: string;
+}
+
+const PhotoFrame = ({ id }: PhotoFrameProps) => {
 
     return (
         <article className="frame-container">
             <div className="frame">
-                <Photo id={photoId} isInGrid={false}/>
+                <Photo id={id} isInGrid={false}/>
             </div>
         </article>
     );

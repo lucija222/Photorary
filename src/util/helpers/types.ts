@@ -39,6 +39,7 @@ export interface ApiPhotoObj {
 export interface PhotoObj extends ApiPhotoObj {
     urls: ApiPhotoObj["urls"] & {
         small_object_url: string;
+        regular_object_url: string;
     }
 }
 export interface ApiUserObj {
