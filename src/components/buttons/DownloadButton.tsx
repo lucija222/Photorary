@@ -9,8 +9,9 @@ interface DownloadButtonProps {
 }
 
 const DownloadButton = ({ id, url }: DownloadButtonProps) => {
-
-    const handlePhotoDownload: MouseEventHandler<HTMLButtonElement> = async (e) => {
+    const handlePhotoDownload: MouseEventHandler<HTMLButtonElement> = async (
+        e
+    ) => {
         e.stopPropagation();
         const imgObjectUrl = await fetchPhotoForDownload(url);
         if (imgObjectUrl) {
@@ -20,8 +21,8 @@ const DownloadButton = ({ id, url }: DownloadButtonProps) => {
 
     return (
         <button type="button" onClick={handlePhotoDownload}>
-        <DownloadSvg />
-    </button>
+            <DownloadSvg />
+        </button>
     );
 };
 

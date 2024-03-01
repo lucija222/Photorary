@@ -3,12 +3,10 @@ import Menu from "../Menu/Menu";
 import SearchBar from "../SearchBar/SearchBar";
 import { MouseEventHandler, useState } from "react";
 import MainHeadingButton from "../../buttons/MainHeadingButton";
-import HamburgerButton from "../../buttons/HamburgerButtoon";
-import useDelayedUnmount from "../../../util/helpers/functions/customHooks/useDelayedUnmount";
+import HamburgerButton from "../../buttons/HamburgerOrXButtoon";
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const shouldRenderMenu = useDelayedUnmount(isMenuOpen, 1000);
 
     const handleMenuToggle: MouseEventHandler<HTMLButtonElement> = (e) => {
         e.stopPropagation();
@@ -20,9 +18,9 @@ const Header = () => {
             <header>
                 <MainHeadingButton />
                 <SearchBar />
-                <HamburgerButton handleMenuToggle={handleMenuToggle} />
+                <HamburgerButton isMenuOpen={isMenuOpen} handleMenuToggle={handleMenuToggle} />
             </header>
-            {shouldRenderMenu && (
+            {isMenuOpen && (
                 <Menu
                     isMenuOpen={isMenuOpen}
                     handleMenuToggle={handleMenuToggle}

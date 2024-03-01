@@ -25,6 +25,14 @@ header {
             display: none;
         }
     }
+
+    #hamburger {
+        @include width-height(30px, 30px);
+
+        #x-svg {
+            padding-top: 2px;
+        }
+    }
 }
 
 @media screen and (min-width: 450px) {

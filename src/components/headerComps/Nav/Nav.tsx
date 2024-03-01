@@ -1,5 +1,5 @@
-import { MouseEventHandler } from "react";
 import "./Nav.scss";
+import { MouseEventHandler } from "react";
 import { Link } from "react-router-dom";
 
 interface NavProps {
@@ -12,7 +12,6 @@ const Nav = ({ handleMenuToggle }: NavProps) => {
         <nav>
             <ul onClick={handleMenuToggle}>
                 <li><Link to="/about">About</Link></li>
-                <li><Link to="/search/photos">Search</Link></li>
             </ul>
         </nav>
     );
