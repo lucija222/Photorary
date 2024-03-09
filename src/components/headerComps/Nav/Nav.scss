@@ -1,8 +1,28 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
 nav ul li {
     list-style: none;
 
     a {
-        font-size: 25px;
-        color: #f5e8df;
+        position: relative;
+        font-size: 22px;
+        color: $light-font-color;
     }    
+}
+
+nav ul li a::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: -7.5%;
+    width: 115%;
+    height: 2px;
+    background-color: $light-font-color;
+    transform: scaleX(0);
+    transition: transform 0.25s ease-in-out;
+}
+
+nav ul li a:hover::after {
+    transform: scaleX(1);
+    transition: transform 0.25s ease-in-out;
 }

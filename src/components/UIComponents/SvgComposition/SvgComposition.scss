@@ -57,20 +57,10 @@
 
 @media screen and (min-width: 450px) {
     #lamp-plant-svg {
-       @include width-height(170px, 190px);
-       bottom: 11.8vh;
+       @include width-height(140px, 160px);
     }
 
     #plant-svg {
-        @include width-height(90px, 110px);
-        bottom: 12vh;
-    }
-
-    #table-svg {
-        height: 13vh;
-    }
-
-    #light-div {
-        bottom: 13vh;
+        @include width-height(70px, 90px);
     }
 }

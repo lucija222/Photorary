@@ -1,6 +1,6 @@
 import "./SvgComposition.scss";
 import { LampSvg, PlantSvg, TableSvg } from "../../../assets/svg/exports";
-import PowerButton from "../PowerButton/PowerButton";
+import PowerButton from "../../buttons/PowerButton/PowerButton";
 import { useRef } from "react";
 
 const SvgComposition = () => {
