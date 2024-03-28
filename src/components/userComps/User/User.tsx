@@ -19,7 +19,7 @@ const User = ({ id, isLastElem, isObserverElem }: UserProps) => {
     const user = useAppSelector((state) => selectUserById(state, id));
     const lastUserRef = useRef<HTMLElement | null>(null);
     const observerElemRef = useInfiniteScroll();
-    useHandleTooFastScroll(lastUserRef);
+    useHandleTooFastScroll(lastUserRef, false);
     useTurnOffLoaders(lastUserRef, observerElemRef, false);
 
     const {

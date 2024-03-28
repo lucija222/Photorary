@@ -17,7 +17,7 @@ const PhotoFrameInGrid = ({ id, isLastElem, isObserverElem }: PhotoFrameInGridPr
     const lastPhotoRef = useRef<HTMLDivElement | null>(null);
     const observerElemRef = useInfiniteScroll();
     useTurnOffLoaders(lastPhotoRef, observerElemRef, true);
-    useHandleTooFastScroll(lastPhotoRef);
+    useHandleTooFastScroll(lastPhotoRef, true);
 
     const handleRefUpdates = (node: HTMLElement | null) => {
         const refObjArr = [
