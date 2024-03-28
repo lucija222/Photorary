@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { ArticleRef } from "../../types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { incrementPageNum, selectIsMaxPages } from "../../../../store/urlSlice";
-import { selectScrollLoader } from "../../../../store/loaderSlice";
+import { selectCheckPhotoStatus } from "../../../../store/photosSlice";
+import { selectCheckUsersStatus } from "../../../../store/usersSlice";
 
-const useHandleTooFastScroll = (elemRef: ArticleRef) => {
+const useHandleTooFastScroll = (elemRef: ArticleRef, isPhotos: boolean) => {
     const dispatch = useAppDispatch();
     const isMaxPages = useAppSelector(selectIsMaxPages);
-    const isScrollLoader = useAppSelector(selectScrollLoader);
+    const isLoaded = useAppSelector(isPhotos ? selectCheckPhotoStatus("succeeded") : selectCheckUsersStatus("succeeded"));
 
     useEffect(() => {
         const element = elemRef.current;
@@ -20,14 +21,14 @@ const useHandleTooFastScroll = (elemRef: ArticleRef) => {
             }
         );
 
-        if (element && !isMaxPages && !isScrollLoader) {
+        if (element && !isMaxPages && isLoaded) {
             observer.observe(element);
         }
 
         return () => {
             observer.disconnect();
         };
-    }, [elemRef, dispatch, isMaxPages, isScrollLoader]);
+    }, [elemRef, dispatch, isMaxPages, isLoaded]);
 
 };
 
