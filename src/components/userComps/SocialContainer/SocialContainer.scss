@@ -1,0 +1,13 @@
+@use "../../../util/helpers/sassHelpers.scss" as *;
+
+.social-container {
+    display: flex;
+    column-gap: 20px;
+    padding-top: 5px;
+
+    svg {
+        height: 25px;
+        width: 25px;
+        fill: $dark-font-color;
+    }
+}
