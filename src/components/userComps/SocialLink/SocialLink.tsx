@@ -1,13 +1,13 @@
 import { InstagramSvg, PortofolioSvg, TwitterSvg } from "../../../assets/svg/exports";
 
-type LinkTypes = "instagram" | "twitter" | "portfolio"
+export type LinkTypes = "instagram" | "twitter" | "portfolio"
 
 interface UserSocialLinkProps {
     url: string, 
     linkType: LinkTypes,
 }
 
-const UserSocialLink = ({url, linkType}: UserSocialLinkProps) => {
+const SocialLink = ({url, linkType}: UserSocialLinkProps) => {
     const svgMap = {
         instagram: <InstagramSvg />,
         twitter: <TwitterSvg />,
@@ -25,4 +25,4 @@ const UserSocialLink = ({url, linkType}: UserSocialLinkProps) => {
     );
 };
 
-export default UserSocialLink;
+export default SocialLink;
