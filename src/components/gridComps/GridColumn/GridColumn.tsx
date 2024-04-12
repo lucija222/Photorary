@@ -1,6 +1,6 @@
 import "./GridColumn.scss";
 import User from "../../userComps/User/User";
-import PhotoFrameInGrid from "../../photoComps/PhotoFrameInGrid/PhotoFrameInGrid";
+import PhotoFrame from "../../photoComps/PhotoFrame/PhotoFrame";
 
 interface GridColumnProps {
     idsArray: string[];
@@ -15,7 +15,7 @@ const GridColumn = ({ idsArray, lastId, idForObserver, isPhotoGrid }: GridColumn
         return idsArray.map((id) => {
             const isLastElem = lastId === id;
             const isObserverElem = idForObserver === id;
-            const Component = isPhotoGrid ? PhotoFrameInGrid : User;
+            const Component = isPhotoGrid ? PhotoFrame : User;
 
             return <Component key={id} id={id} isLastElem={isLastElem} isObserverElem={isObserverElem} />
         });
