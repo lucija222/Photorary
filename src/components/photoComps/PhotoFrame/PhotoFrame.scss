@@ -14,7 +14,24 @@
         display: inline-block;
         padding: 15px;
         position: relative;
-        text-align: center;
+
+        &::before {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+            inset: -4px;
+            border-radius: 2px;
+            box-shadow: 0 0.2vw 0.5vw 0.2vw rgba(0, 0, 0, 0.25) inset;
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+            inset: -7px;
+            border-radius: 2px;
+            box-shadow: 0 0.2vw 0.5vw 0.3vw rgba(0, 0, 0, 0.25);
+        }
     }
 }
 
