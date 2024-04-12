@@ -1,9 +1,9 @@
 import "./FullscreenPhoto.scss";
 import { MouseEventHandler } from "react";
 import XButton from "../../buttons/XButton";
-import PhotoFrame from "../PhotoFrame/PhotoFrame";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { resetFullscreenPhoto, selectFullscreenPhotoId, selectIsFullscreenPhoto } from "../../../store/fullscreenPhotoSlice";
+import PhotoFrame from "../PhotoFrame/PhotoFrame";
 
 const FullscreenPhoto = () => {
     const dispatch = useAppDispatch();
@@ -22,7 +22,7 @@ const FullscreenPhoto = () => {
             {isFullscreenPhotoView && (
                 <section id="fullscreen-photo-container">
                     <XButton handleButtonClick={handleCloseFullscreenPhoto} />
-                    <PhotoFrame id={id}/>
+                    <PhotoFrame id={id} isLastElem={false} isObserverElem={false}/>
                 </section>
             )}
         </>

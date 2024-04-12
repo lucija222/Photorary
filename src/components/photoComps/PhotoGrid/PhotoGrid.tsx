@@ -2,13 +2,13 @@ import "./PhotoGrid.scss";
 import { useEffect, useRef } from "react";
 import Loader from "../../UIComponents/Loader/Loader";
 import { FetchThunkArg } from "../../../util/helpers/types";
+import { selectScrollLoader } from "../../../store/loaderSlice";
 import NoResults from "../../UIComponents/NoResults/NoResults";
 import FullscreenPhoto from "../FullscreenPhoto/FullscreenPhoto";
+import { fetchPhotos } from "../../../store/asyncThunks/fetchPhotos";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { selectScrollLoader, turnOffMainLoader, } from "../../../store/loaderSlice";
 import RenderDynamicGridColumns from "../../gridComps/RenderDynamicGridColumns/RenderDynamicGridColumns";
 import { resetPhotosStatus, selectCheckPhotoStatus, selectIsNoPhotoResults, }from "../../../store/photosSlice";
-import { fetchPhotos } from "../../../store/asyncThunks/fetchPhotos";
 
 interface PhotoGridProps {
     payload: FetchThunkArg;
@@ -33,23 +33,20 @@ const PhotoGrid = ({ payload }: PhotoGridProps) => {
         };
     }, [dispatch]);
 
-    useEffect(() => {
-        if (isNoResults) {
-            dispatch(turnOffMainLoader());
-        }
-    }, [dispatch, isNoResults]);
-
     return (
         <>
-           <section id="photos-grid" ref={photosGridRef}>
-            {isNoResults && <NoResults />}
-            <RenderDynamicGridColumns
-                gridRef={photosGridRef}
-                isPhotoGrid={true}
-            />
-        </section>
-        {isScrollLoader && <Loader type="in-grid" />}
-        <FullscreenPhoto />
+            <section id="photos-grid" ref={photosGridRef}>
+                {isNoResults ? (
+                    <NoResults />
+                ) : (
+                    <RenderDynamicGridColumns
+                        gridRef={photosGridRef}
+                        isPhotoGrid={true}
+                    />
+                )}
+            </section>
+            {isScrollLoader && <Loader type="in-grid" />}
+            <FullscreenPhoto />
         </>
     );
 };
