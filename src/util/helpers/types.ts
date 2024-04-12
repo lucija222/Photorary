@@ -13,7 +13,7 @@ export interface InitAdapterState {
 }
 
 //--------------------------------------------------------API RESPONSE TYPES
-interface UserProfileImage {
+export interface UserProfileImage {
     small: string;
     medium: string;
     large: string;

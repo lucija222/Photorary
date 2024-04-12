@@ -20,9 +20,9 @@ const FullscreenPhoto = () => {
     return (
         <>
             {isFullscreenPhotoView && (
-                <section id="fullscreen-photo-container">
+                <section className="fullscreen-photo-container">
                     <XButton handleButtonClick={handleCloseFullscreenPhoto} />
-                    <PhotoFrame id={id} isLastElem={false} isObserverElem={false}/>
+                    <PhotoFrame id={id} isLastElem={false} isObserverElem={false} />
                 </section>
             )}
         </>
