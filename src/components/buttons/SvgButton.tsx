@@ -8,9 +8,9 @@ interface SvgButtonProps {
 }
 
 const SvgButton = ({ SvgComponent, handleButtonClick }: SvgButtonProps) => {
-    
+
     return (
-        <button type="button" id="menu-btn" onClick={handleButtonClick}>
+        <button type="button" onClick={handleButtonClick}>
             <SvgComponent />
         </button>
     );

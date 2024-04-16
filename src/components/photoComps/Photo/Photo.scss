@@ -12,12 +12,6 @@
         cursor: pointer;
     }
 
-    .photograph + address + button {
-            position: absolute;
-            bottom: 10px;
-            right: 15px;
-        }
-
 .disable-click {
     pointer-events: none;
 }

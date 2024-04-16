@@ -26,7 +26,7 @@ header {
         }
     }
 
-    #menu-btn {
+     h1 + form + button {
         translate: 0 -7px;
         @include width-height(39px, 30px);
     }
