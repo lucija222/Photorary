@@ -1,18 +1,17 @@
 import "./FullscreenPhoto.scss";
 import { MouseEventHandler } from "react";
-import XButton from "../../buttons/XButton";
+import PhotoFrame from "../PhotoFrame/PhotoFrame";
+import SvgButton from "../../buttons/SvgButton";
+import { XSvg } from "../../../assets/svg/exports";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { resetFullscreenPhoto, selectFullscreenPhotoId, selectIsFullscreenPhoto } from "../../../store/fullscreenPhotoSlice";
-import PhotoFrame from "../PhotoFrame/PhotoFrame";
 
 const FullscreenPhoto = () => {
     const dispatch = useAppDispatch();
     const isFullscreenPhotoView = useAppSelector(selectIsFullscreenPhoto);
     const id = useAppSelector(selectFullscreenPhotoId);
 
-    const handleCloseFullscreenPhoto: MouseEventHandler<HTMLButtonElement> = (
-        e
-    ) => {
+    const handleCloseFullscreen: MouseEventHandler<HTMLButtonElement> = (e) => {
         e.stopPropagation();
         dispatch(resetFullscreenPhoto(id));
     };
@@ -21,7 +20,7 @@ const FullscreenPhoto = () => {
         <>
             {isFullscreenPhotoView && (
                 <section className="fullscreen-photo-container">
-                    <XButton handleButtonClick={handleCloseFullscreenPhoto} />
+                    <SvgButton SvgComponent={XSvg} handleButtonClick={handleCloseFullscreen} />
                     <PhotoFrame id={id} isLastElem={false} isObserverElem={false} />
                 </section>
             )}

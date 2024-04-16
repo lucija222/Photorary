@@ -2,7 +2,7 @@ import "./Photo.scss";
 import { MouseEventHandler } from "react";
 import { RootState } from "../../../store/store";
 import PhotoAuthor from "../PhotoAuthor/PhotoAuthor";
-import DownloadButton from "../../buttons/DownloadButton";
+import PhotoDownload from "../PhotoDownload/PhotoDownload";
 import { selectPhotoById } from "../../../store/photosSlice";
 import { photoAlt } from "../../../util/helpers/functions/photoAlt";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -37,7 +37,7 @@ const Photo = ({ id }: PhotoProps) => {
                 onClick={handlePhotoClick}
             />
             <PhotoAuthor username={username} profile_image={profile_image} name={name} />
-            <DownloadButton id={id} url={full}/>
+            <PhotoDownload id={id} url={full}/>
         </>
     );
 };
