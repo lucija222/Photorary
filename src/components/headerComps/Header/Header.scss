@@ -26,12 +26,9 @@ header {
         }
     }
 
-    #hamburger {
-        @include width-height(30px, 30px);
-
-        #x-svg {
-            padding-top: 2px;
-        }
+    #menu-btn {
+        translate: 0 -7px;
+        @include width-height(39px, 30px);
     }
 }
 
