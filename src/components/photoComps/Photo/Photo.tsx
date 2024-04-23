@@ -7,7 +7,7 @@ import { selectPhotoById } from "../../../store/photosSlice";
 import { photoAlt } from "../../../util/helpers/functions/photoAlt";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { fetchFullscreenPhoto } from "../../../store/asyncThunks/fetchFullscreenPhoto";
-import { selectFullscreenPhotoId, selectIsFullscreenPhoto } from "../../../store/fullscreenPhotoSlice";
+import { selectFullscreenPhotoId } from "../../../store/fullscreenPhotoSlice";
 
 interface PhotoProps {
     id: string;
@@ -16,9 +16,8 @@ interface PhotoProps {
 const Photo = ({ id }: PhotoProps) => {
     const dispatch = useAppDispatch();
     const photo = useAppSelector((state: RootState) => selectPhotoById(state, id));
-    const isFullscreenView = useAppSelector(selectIsFullscreenPhoto);
     const fullscreenPhotoId = useAppSelector(selectFullscreenPhotoId);
-    const isFullscreenPhoto = isFullscreenView && fullscreenPhotoId === id;
+    const isFullscreenPhoto = fullscreenPhotoId === id;
     const { name, username, profile_image } = photo.user;
     const { small_object_url, regular, regular_object_url, full } = photo.urls;    
     const { description } = photo;
@@ -33,7 +32,7 @@ const Photo = ({ id }: PhotoProps) => {
             <img
                 src={isFullscreenPhoto ? regular_object_url : small_object_url}
                 alt={photoAlt(description, name)}
-                className={isFullscreenView ? "photograph disable-click" : "photograph"}
+                className={isFullscreenPhoto ? "photograph disable-click" : "photograph"}
                 onClick={handlePhotoClick}
             />
             <PhotoAuthor username={username} profile_image={profile_image} name={name} />

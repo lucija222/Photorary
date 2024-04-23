@@ -2,8 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchFullscreenPhoto } from "./asyncThunks/fetchFullscreenPhoto";
 
 const initialState = {
-    isFullscreenPhotoView: false,
-    photoId: ""
+    photoId: "",
 };
 
 const fullscreenPhotoSlice = createSlice({
@@ -12,26 +11,21 @@ const fullscreenPhotoSlice = createSlice({
     reducers: {
         resetFullscreenPhoto(state, action: PayloadAction<string>) {
             state.photoId = "";
-            state.isFullscreenPhotoView = false;
-        }
+        },
     },
     extraReducers(builder) {
-        builder
-            .addCase(fetchFullscreenPhoto.fulfilled, (state, action) => {
-                state.photoId = action.meta.arg.id;
-                state.isFullscreenPhotoView = true;
-            })
+        builder.addCase(fetchFullscreenPhoto.fulfilled, (state, action) => {
+            state.photoId = action.meta.arg.id;
+        });
     },
     selectors: {
-        selectIsFullscreenPhoto: (state): boolean => {
-            return state.isFullscreenPhotoView;
-        },
         selectFullscreenPhotoId: (state): string => {
             return state.photoId;
-        }
-    }
+        },
+    },
 });
 
-export const { resetFullscreenPhoto } = fullscreenPhotoSlice.actions; 
-export const { selectIsFullscreenPhoto, selectFullscreenPhotoId } = fullscreenPhotoSlice.selectors;
+export const { resetFullscreenPhoto } = fullscreenPhotoSlice.actions;
+export const { selectFullscreenPhotoId } = fullscreenPhotoSlice.selectors;
+
 export default fullscreenPhotoSlice.reducer;
